@@ -6,7 +6,7 @@
 - (defaultWarehouse):
     saveVariableAs: "defaultWarehouse"
     createWarehouseFrom:
-        tarFileUrl: "https://github.com/NixOS/nixpkgs/archive/d4f247e89f6e10120f911e2e2d2254a050d0f732.tar.gz"
+        tarFileUrl: "https://github.com/NixOS/nixpkgs/archive/05bbf675397d5366259409139039af8077d695ce.tar.gz"
     arguments:
         config:
             allowUnfree: true

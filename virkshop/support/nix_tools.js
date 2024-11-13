@@ -390,7 +390,6 @@ export const nix = {
             }
 
             async function runPureBash(script, ...args) {
-                console.debug(`args is:`,args)
                 var {success} = await run(`/bin/bash`, `-c`, "sudo echo\n"+script, "--", ...args, Env({PATH: "/sbin:/bin:/usr/local/bin:/usr/bin:/usr/sbin"}))
                 return success
             }

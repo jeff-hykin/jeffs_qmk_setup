@@ -243,11 +243,6 @@ export const createVirkshop = async (arg)=>{
                     await Promise.all(promises)
                 },
                 async importPlugin(pluginPath) {
-                    try {
-                        throw Error(``)
-                    } catch (error) {
-                        console.debug(`trace is:`,error.stack)
-                    }
                     if (virkshop.options.debuggingLevel > 1) {
                         console.log(`    importing plugin: ${pluginPath}`)
                     }
@@ -541,13 +536,16 @@ export const createVirkshop = async (arg)=>{
                                                 "-q",
                                                 `
                                                     import { FileSystem } from "https://deno.land/x/quickr@0.6.72/main/file_system.js"
-                                                    console.log("eval1")
+                                                    const eventName = ${JSON.stringify(eventName)}
                                                     const [ virkshopFile, tempShellOutputPath, pluginPath ] = Deno.args
                                                     const { virkshop, shellApi } = await import(virkshopFile)
                                                     const { pluginOutput } = await virkshop._internal.importPlugin(pluginPath)
-                                                    const result = await pluginOutput.events[${JSON.stringify(eventName)}].apply(pluginOutput)
+                                                    const result = await pluginOutput.events[eventName].apply(pluginOutput)
+                                                    if (result instanceof Object && (result.beforeSetup|| result.beforeReadingSystemTools|| result.beforeShellScripts|| result.beforeEnteringVirkshop)) {
+                                                        console.error(\`In the plugin \${pluginPath}, the event hook \${JSON.stringify(eventName)} returned an object.\nThe author of that was probably a bit confused as, yes\nthe @setup_without_system_tools event expects an output like { beforeSetup:()=>{}, }\nbut @setup_without_system_tools is special.\nOther events must return either nothing or a string\n(a string that will be executed as a sourced shell script)\n\nAKA the ${eventName} isn't allowed to return an object.\`)
+                                                        Deno.exit(1)
+                                                    }
                                                     const shellString = shellApi.joinStatements((result||[]))
-                                                    console.log("writing to",tempShellOutputPath)
                                                     await FileSystem.write({
                                                         data: shellString,
                                                         path: tempShellOutputPath,
@@ -640,7 +638,6 @@ export const createVirkshop = async (arg)=>{
                         // load all plugins
                         ...(await glob("**/*.deno.js", {startPath: virkshop.pathTo.plugins, })).map(
                             eachPath=>{
-                                console.debug(`eachPath is:`,eachPath)
                                 return virkshop._internal.setupPlugin(eachPath, virkshop)
                             }
                         ),
@@ -1324,7 +1321,13 @@ export const shellApi = Object.defineProperties(
             return `${name}=${shellApi.escapeShellArgument(value)}`
         },
         joinStatements(commands) {
-            return commands.flat(Infinity).join("\n;\n")
+            if (commands instanceof Array) {
+                return commands.flat(Infinity).join("\n;\n")
+            } else {
+                console.log(commands)
+                console.warn(`joinStatements() was called with a non-array argument, so it will return an empty string: ${commands}`)
+                return ""
+            }
         },
     },
     {
@@ -1416,6 +1419,7 @@ export const shellApi = Object.defineProperties(
             createJavasriptValueFromYamlString(data) {
                 // if there is a default export somewhere, its very likely not in a string (so try NOT prepending default export)
                 if (data.match(/export default/)) {
+                    // FIXME: btoa doesn't do what we want (not perfectly)
                     return import(`data:text/javascript;base64, ${btoa(data)}`).catch(()=>import(`data:text/javascript;base64, ${btoa(`export default ${data}`)}`)).then((value)=>value.default)
                 // otherwise we can be sure a default export is needed
                 } else {
