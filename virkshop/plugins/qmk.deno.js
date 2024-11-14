@@ -24,7 +24,10 @@ export default ({id, pluginSettings, virkshop, shellApi, helpers })=>({
     },
     events: {
         async '@setup_with_system_tools/qmk'() {
-            await this.methods.setupQmkIfNeeded()
+            helpers.shortTermDoOneTime(async ()=>{
+                console.log(`        [qmk] runing qmk setup`)
+                await $$`qmk --interactive setup -H ${virkshop.pathTo.project}/home`.stdinText(`y\ny\ny\ny\n`)
+            })
         },
         // async '@setup_without_system_tools/python'() {
         //    return {
@@ -124,22 +127,11 @@ export default ({id, pluginSettings, virkshop, shellApi, helpers })=>({
         // },
     },
     methods: {
-        async setupQmkIfNeeded() {
-            const setupCheckFile = `${virkshop.pathTo.temporary}/long_term/checks/qmk_setup`
-            await FileSystem.ensureIsFile(setupCheckFile)
-            await helpers.changeChecker({
-                checkName: "qmk_setup",
-                filePaths: [ setupCheckFile ],
-                values: [],
-                executeOnFirstTime: true,
-                whenNoChange: ()=>{
-                    console.log(`        [qmk] skipping qmk setup since it seems to already be setup`)
-                },
-                whenChanged: async (...args)=>{
-                    console.log(`        [qmk] runing qmk setup`)
-                    await $$`echo "yes\n" | qmk setup -H ${virkshop.pathTo.project}/home`
-                },
-            })
-        },
+        // async setupQmkIfNeeded() {
+        //     helpers.shortTermDoOneTime(async ()=>{
+        //         console.log(`        [qmk] runing qmk setup`)
+        //         await $$`qmk --interactive setup -H ${virkshop.pathTo.project}/home`.stdinText(`y\ny\ny\ny\n`)
+        //     })
+        // },
     },
 })
