@@ -12,8 +12,6 @@ const $$ = (...args)=>$(...args).noThrow()
 // indent everything
 export default ({id, pluginSettings, virkshop, shellApi, helpers })=>({
     settings: {
-        // virtualEnvFolder: `${virkshop.pathTo.project}/.venv`,
-        // requirementsTxtPath: `${virkshop.pathTo.project}/requirements.txt`,
         ...pluginSettings,
     },
     commands: {
@@ -111,11 +109,5 @@ export default ({id, pluginSettings, virkshop, shellApi, helpers })=>({
         },
     },
     methods: {
-        // async setupQmkIfNeeded() {
-        //     helpers.shortTermDoOneTime(async ()=>{
-        //         console.log(`        [qmk] runing qmk setup`)
-        //         await $$`qmk --interactive setup -H ${virkshop.pathTo.project}/home`.stdinText(`y\ny\ny\ny\n`)
-        //     })
-        // },
     },
 })
