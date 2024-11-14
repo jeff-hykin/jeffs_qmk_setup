@@ -1323,6 +1323,8 @@ export const shellApi = Object.defineProperties(
         joinStatements(commands) {
             if (commands instanceof Array) {
                 return commands.flat(Infinity).join("\n;\n")
+            } else if (typeof commands == "string") {
+                return commands
             } else {
                 console.log(commands)
                 console.warn(`joinStatements() was called with a non-array argument, so it will return an empty string: ${commands}`)
