@@ -328,7 +328,7 @@ export const createVirkshop = async (arg)=>{
                                     // only set true if completed without error
                                     storageManager.set(key, true, directKey)
                                 } catch (error) {
-                                    console.error(error)
+                                    console.error(`[virkshop] error while running a doOneTime function:`, error.stack)
                                 }
                             }
                         }
