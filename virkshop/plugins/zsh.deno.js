@@ -94,7 +94,6 @@ export default ({id, pluginSettings, virkshop, shellApi, helpers })=>({
                 }
 
                 _prompt_help__updater () {
-                    echo "running precmd"
                     _prompt_help__simple_pwd__output="$(_prompt_help__simple_pwd)"
                     _prompt_help__git_status__output="$(_prompt_help__git_status)"
                     _prompt_help__python_if_available__output="$(_prompt_help__python_if_available)"
