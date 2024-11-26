@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/qmk/pico-sdk.git
+	branch = qmk-master
+	commit = a3398d8d3a772f37fef44a74743a1de69770e9c2
+	parent = de4afb1b6aa3806403655731917fb0e5a0c73b0d
+	method = merge
+	cmdver = 0.4.5
