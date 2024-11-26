@@ -54,6 +54,13 @@ static uint16_t auto_pointer_layer_timer = 0;
 #    define SNIPING KC_NO
 #endif // !POINTING_DEVICE_ENABLE
 
+const uint16_t PROGMEM test_combo1[] = {KC_J, KC_U, COMBO_END};
+// const uint16_t PROGMEM test_combo2[] = {KC_C, KC_D, COMBO_END};
+combo_t key_combos[COMBO_COUNT] = {
+    COMBO(test_combo1, KC_D),
+    // COMBO(test_combo2, LCTL(KC_Z)), // keycodes with modifiers are possible too!
+};
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
