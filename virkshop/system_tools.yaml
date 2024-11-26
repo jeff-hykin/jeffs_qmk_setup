@@ -473,3 +473,8 @@
     load: [ "qmk" ]
     asBuildInput: true
     asNativeBuildInput: true
+
+- (package):
+    load: [ "gcc" ]
+    asBuildInput: true
+    asNativeBuildInput: true
