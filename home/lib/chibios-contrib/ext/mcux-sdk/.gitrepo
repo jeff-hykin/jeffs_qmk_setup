@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/NXPmicro/mcux-sdk
+	branch = main
+	commit = fbc4f324fb42a202f0879b6e5a5b1fd4b66e7be1
+	parent = fbc4f324fb42a202f0879b6e5a5b1fd4b66e7be1
+	method = merge
+	cmdver = 0.4.5

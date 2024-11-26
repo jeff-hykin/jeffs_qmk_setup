@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/qmk/printf
+	branch = qmk-master
+	commit = c2e3b4e10d281e7f0f694d3ecbd9f320977288cc
+	parent = e4f646d1f586978ba3b2a6b1c13032e80138f385
+	method = merge
+	cmdver = 0.4.5

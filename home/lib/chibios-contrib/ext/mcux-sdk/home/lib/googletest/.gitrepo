@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/qmk/googletest
+	branch = qmk-master
+	commit = e2239ee6043f73722e7aa812a459f54a28552929
+	parent = cf24641f39031b735a04e2dfc8ee54ab87370acb
+	method = merge
+	cmdver = 0.4.5
