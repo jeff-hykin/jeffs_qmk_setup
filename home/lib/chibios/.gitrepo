@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/qmk/ChibiOS
+	branch = qmk-master
+	commit = be44b3305f9a9fe5f2f49a4e7b978db322dc463e
+	parent = 5d2ea72c83990a7a7603940c582e25104d882390
+	method = merge
+	cmdver = 0.4.5
