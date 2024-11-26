@@ -157,6 +157,16 @@
 
 #
 #
+# project management
+#
+#
+- (package):
+    load: [ "git-subrepo",]
+    asBuildInput: true
+
+
+#
+#
 # Some very basic commands you may want to comment in
 #
 #
