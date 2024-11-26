@@ -57,7 +57,7 @@ enum charybdis_keymap_layers {
 
 const uint16_t PROGMEM test_combo1[] = {KC_J, KC_U, COMBO_END};
 // const uint16_t PROGMEM test_combo2[] = {KC_C, KC_D, COMBO_END};
-combo_t key_combos[COMBO_COUNT] = {
+combo_t key_combos[] = {
     COMBO(test_combo1, KC_D),
     // COMBO(test_combo2, LCTL(KC_Z)), // keycodes with modifiers are possible too!
 };
