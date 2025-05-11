@@ -64,7 +64,7 @@ for (const [rowName, list] of Object.entries(rightHand).concat(Object.entries(le
     }
 }
 
-export const keyNameToIndex = {
+export const keyboard = {
     leftHand,
     rightHand,
     rowColumnToIndex,
