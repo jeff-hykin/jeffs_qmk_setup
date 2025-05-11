@@ -1,3 +1,88 @@
+import { indent as indenter } from 'https://esm.sh/gh/jeff-hykin/good-js@1.17.1.0/source/flattened/indent.js'
+
+const modifierNameMap = {
+    leftShift: "LSFT",
+    rightShift: "RSFT",
+    leftControl: "LCTL",
+    rightControl: "RCTL",
+    leftAlt: "LALT",
+    rightAlt: "RALT",
+    leftGui: "LGUI",
+    rightGui: "RGUI",
+}
+export const sendKeyTap = (key, options={})=> {
+    // {shift, leftShift, rightShift, control, leftControl, rightControl, alt, leftAlt, rightAlt, gui, leftGui, rightGui, }
+    options["leftShift"] = options["leftShift"] || options["shift"]
+    delete options["shift"]
+    options["leftControl"] = options["leftControl"] || options["control"]
+    delete options["control"]
+    options["leftAlt"] = options["leftAlt"] || options["alt"]
+    delete options["alt"]
+    options["leftGui"] = options["leftGui"] || options["gui"]
+    delete options["gui"]
+    
+    let count = 0
+    let string = ""
+    for (const [modifier, isActive] of Object.entries(options)) {
+        if (isActive) {
+            count++
+            string += `${modifierNameMap[modifier]}(`
+        }
+    }
+    string = `${string}${key}${")".repeat(count)}`
+    if (count > 0) {
+        return `tap_code16(${string})`
+    }
+    return `tap_code(${string})`
+}
+import { combinations } from 'https://esm.sh/gh/jeff-hykin/good-js@1.17.1.0/source/flattened/combinations.js'
+
+export const sendKeyTapPermutations = (key, {indent, modifierToVarName})=> {
+    // simplify options
+    modifierToVarName["leftShift"] = modifierToVarName["leftShift"] || modifierToVarName["shift"]
+    delete modifierToVarName["shift"]
+    modifierToVarName["leftControl"] = modifierToVarName["leftControl"] || modifierToVarName["control"] || modifierToVarName["ctrl"]
+    delete modifierToVarName["ctrl"]
+    delete modifierToVarName["control"]
+    modifierToVarName["leftAlt"] = modifierToVarName["leftAlt"] || modifierToVarName["alt"]
+    delete modifierToVarName["alt"]
+    modifierToVarName["leftGui"] = modifierToVarName["leftGui"] || modifierToVarName["gui"]
+    delete modifierToVarName["gui"]
+    for (const [key, value] of Object.entries(modifierToVarName)) {
+        if (value == null) {
+            delete modifierToVarName[key]
+        }
+    }
+    let which
+    if (Object.keys(modifierToVarName).some(each=>modifierNameMap[each] == null && (which=each, true))) {
+        throw Error(`
+            You have a modifier that isn't supported by sendKeyTapPermutations
+            problematic one: ${which}
+            Valid modifiers are: ${JSON.stringify(Object.keys(modifierNameMap))}
+            Provided names were: ${JSON.stringify(Object.keys(modifierToVarName))}
+        `)
+    }
+
+    let options = []
+    for (const [modifierName, varName] of Object.entries(modifierToVarName)) {
+        options.push(modifierName)
+    }
+    const outputCodeChunks = [
+        `// ${key} + modifiers`,
+        `if (${Object.values(modifierToVarName).map(each=>`!${each}`).join(" && ")}) {`,
+        `    tap_code(${key});`,
+    ]
+    // start with largest combinations (it matters)
+    for (const modifiers of [...combinations(options)].reverse()) {
+        const varNames = modifiers.map(eachModifier=>modifierToVarName[eachModifier])
+        // inefficent, but I dont care
+        outputCodeChunks.push(`} else if (${varNames.join(" && ")}) {`)
+        outputCodeChunks.push(`    tap_code16(${modifiers.map(eachModifier=>`${modifierNameMap[eachModifier]}(`).join("")}${key}${")".repeat(modifiers.length)});`)
+        // ex: tap_code16(RSFT(LCTL(KC_A)))
+    }
+    outputCodeChunks.push(`}`)
+    return indenter({string:outputCodeChunks.join("\n"), by: indent||"", noLead:true})
+}
 export const keys = {
     XXXXXXX: "XXXXXXX",
     

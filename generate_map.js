@@ -323,6 +323,40 @@ bool shutdown_user(bool) {
     #endif // RGB_MATRIX_ENABLE
     return false;
 }
+
+bool key_is_down[MATRIX_ROWS][MATRIX_COLS] = {0};
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+    // setup
+    uint8_t row = record->event.key.row;
+    uint8_t col = record->event.key.col;
+    if (record->event.pressed) {
+        key_is_down[row][col] = true;
+    } else if (record->event.released) {
+        key_is_down[row][col] = false;
+    }
+    
+    // 
+    // Normal logic goes here
+    // 
+    
+    // // uint16_t which_physical_key_was_pressed = row * MATRIX_COLS + col;
+    // if (keycode == KC_A && record->event.pressed) {
+    //     tap_code(KC_SPC);  // simulate a spacebar tap
+    //     return false;      // block the original 'A' key
+    // }
+    
+    // switch(keycode) {
+    //     case KC_ESC:
+    //         if (record->event.pressed) {
+    //             // SEND_STRING("This is custom keycode #1.");
+    //         } else {
+                
+    //         }
+    //         return true;
+    // }
+    
+    return process_record_user(keycode, record);
+};
 `
         }
     }

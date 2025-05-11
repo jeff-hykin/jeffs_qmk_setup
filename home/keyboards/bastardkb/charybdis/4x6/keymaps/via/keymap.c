@@ -170,3 +170,110 @@ bool shutdown_user(bool) {
 #endif // RGB_MATRIX_ENABLE
 return false;
 }
+
+//   keyevent_t event {
+//         keypos_t key {
+//         uint8_t col
+//         uint8_t row
+//         }
+//         bool     pressed
+//         uint16_t time
+//     }
+
+const uint16_t key_count = MATRIX_ROWS*MATRIX_COLS;
+uint16_t keys_down = 0;
+bool key_was_consumed[MATRIX_ROWS*MATRIX_COLS] = {0};
+bool physical_key_is_down[MATRIX_ROWS*MATRIX_COLS] = {0};
+bool combo_was_activated = false;
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // setup
+    uint8_t row = record->event.key.row;
+    uint8_t col = record->event.key.col;
+    uint16_t index = row * MATRIX_COLS + col;
+    const bool keydown = record->event.pressed;
+    bool some_other_physical_key_is_down = keys_down >= 1;
+    if (keydown) {
+        keys_down++;
+        physical_key_is_down[index] = true;
+    } else {
+        keys_down--;
+        physical_key_is_down[index] = false;
+    }
+    if (false && some_other_physical_key_is_down) {} // defeat the "warning not used" check
+    
+    // for (uint16_t other_index = 0; other_index < key_count; other_index++) {
+    //     if (physical_key_is_down[other_index] && other_index != index) {
+    //         some_other_physical_key_is_down = true;
+    //         break;
+    //     }
+    // }
+    
+    
+    // available data: uint16_t keycode, keyrecord_t *record, bool keydown, row, col, keys_down, some_other_physical_key_is_down, physical_key_is_down[row][col]
+    bool key_pressed_on_left_hand = index == 5 || index == 4 || index == 3 || index == 2 || index == 1 || index == 0 || index == 11 || index == 10 || index == 9 || index == 8 || index == 7 || index == 6 || index == 17 || index == 16 || index == 15 || index == 14 || index == 13 || index == 12 || index == 23 || index == 22 || index == 21 || index == 20 || index == 19 || index == 18 || index == 27 || index == 28 || index == 25 || index == 29 || index == 26;
+    
+    bool ctrl_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 43 : 13)];
+    bool shift_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 44 : 14)];
+    bool alt_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 45 : 15)];
+    bool gui_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 46 : 16)];
+    
+    // do nothing on keyup of any "consumed" key
+    if (!keydown && key_was_consumed[index]) {
+        key_was_consumed[index] = false;
+        return false;
+    }
+    
+    if (index == 14) {
+        if (keydown) {
+            return false; // do nothing on keydown (other than remember it)
+        // if not "consumed" 
+        } else {
+            // activate the normal key
+            tap_code(KC_S);
+            return false;
+        }
+    }
+    
+    if (index == 39) {
+        // KC_UP + modifiers
+            if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                tap_code(KC_UP);
+            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                tap_code16(LSFT(LCTL(LALT(LGUI(KC_UP)))));
+            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                tap_code16(LCTL(LALT(LGUI(KC_UP))));
+            } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                tap_code16(LSFT(LALT(LGUI(KC_UP))));
+            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                tap_code16(LSFT(LCTL(LGUI(KC_UP))));
+            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                tap_code16(LSFT(LCTL(LALT(KC_UP))));
+            } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                tap_code16(LALT(LGUI(KC_UP)));
+            } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                tap_code16(LCTL(LGUI(KC_UP)));
+            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                tap_code16(LCTL(LALT(KC_UP)));
+            } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                tap_code16(LSFT(LGUI(KC_UP)));
+            } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                tap_code16(LSFT(LALT(KC_UP)));
+            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                tap_code16(LSFT(LCTL(KC_UP)));
+            } else if (gui_physical_key_is_down) {
+                tap_code16(LGUI(KC_UP));
+            } else if (alt_physical_key_is_down) {
+                tap_code16(LALT(KC_UP));
+            } else if (ctrl_physical_key_is_down) {
+                tap_code16(LCTL(KC_UP));
+            } else if (shift_physical_key_is_down) {
+                tap_code16(LSFT(KC_UP));
+            }
+        memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+        return false; // block the original 'i' key
+    }
+    //if (physical_key_is_down[59]) {
+    //}
+
+    return true;
+};
