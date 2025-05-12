@@ -4,9 +4,11 @@ Current Plan
     - ctrl is outer pinky
 - DONE: arrow keys with spacebar
 - DONE: brackets above arrow keys
-- parenthesis above arrow keys with both right thumb modifiers
-- left thumb modifier plus left pinky makes squiggly brackets above arrow keys
-- backspace is spacebar plus letter P
+- DONE: parenthesis above arrow keys with both right thumb modifiers
+<!-- - left thumb modifier plus left pinky makes squiggly brackets above arrow keys -->
+- DONE: backspace is spacebar plus letter P
+- DONE: add programming button
+- Fix what happens when a non-combo is confirmed (replay press-down order)
 - enter is spacebar plus semicolon
 - tab is: fd combo
 - esc is sa combo

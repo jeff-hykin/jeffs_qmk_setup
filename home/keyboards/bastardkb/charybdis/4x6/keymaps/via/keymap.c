@@ -222,6 +222,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         key_was_consumed[index] = false;
         return false;
     }
+    
+    // 
+    // boot key
+    // 
+    if (index == 30) {
+        reset_keyboard();
+        return false;
+    }
 
     // 
     // rightThumbMod1 (arrowLayer)
@@ -319,6 +327,51 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // 
     // spacebar modifier
     // 
+        if (physical_key_is_down[57] || physical_key_is_down[55]) {
+            // 
+            // backspace
+            // 
+            if (index == 37) {
+                // KC_BSPC + modifiers
+                    if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                        tap_code(KC_BSPC);
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(LGUI(KC_BSPC)))));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(LGUI(KC_BSPC))));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(LGUI(KC_BSPC))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LGUI(KC_BSPC))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(KC_BSPC))));
+                    } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LALT(LGUI(KC_BSPC)));
+                    } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LGUI(KC_BSPC)));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(KC_BSPC)));
+                    } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LGUI(KC_BSPC)));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(KC_BSPC)));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(KC_BSPC)));
+                    } else if (gui_physical_key_is_down) {
+                        tap_code16(LGUI(KC_BSPC));
+                    } else if (alt_physical_key_is_down) {
+                        tap_code16(LALT(KC_BSPC));
+                    } else if (ctrl_physical_key_is_down) {
+                        tap_code16(LCTL(KC_BSPC));
+                    } else if (shift_physical_key_is_down) {
+                        tap_code16(LSFT(KC_BSPC));
+                    }
+                key_was_consumed[37] = true;
+                key_was_consumed[57] = true;
+                // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+                return false;
+            }
+        }
         if (physical_key_is_down[57]) {
             // 
             // arrow keys

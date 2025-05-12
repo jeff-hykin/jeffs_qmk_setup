@@ -235,6 +235,7 @@ const modifierToVarName = { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_phy
 
 const rightThumbMod1 = keyboard.rightHand.thumb[1]
 const rightThumbMod2 = keyboard.rightHand.thumb[0]
+const backspaceKeyIndex = keyboard.rightHand.homeRowUp1[3]
 
 let code = makeKeyboardCode(`
     // available data: uint16_t keycode, keyrecord_t *record, bool keydown, row, col, keys_down, some_other_physical_key_is_down, physical_key_is_down[row][col]
@@ -248,6 +249,14 @@ let code = makeKeyboardCode(`
     // do nothing on keyup of any "consumed" key
     if (!keydown && key_was_consumed[index]) {
         key_was_consumed[index] = false;
+        return false;
+    }
+    
+    // 
+    // boot key
+    // 
+    if (index == ${keyboard.rightHand.homeRowUp2[4]}) {
+        reset_keyboard();
         return false;
     }
 
@@ -281,6 +290,18 @@ let code = makeKeyboardCode(`
     // 
     // spacebar modifier
     // 
+        if (physical_key_is_down[${rightThumbMod1}] || physical_key_is_down[${rightThumbMod2}]) {
+            // 
+            // backspace
+            // 
+            if (index == ${backspaceKeyIndex}) {
+                ${sendKeyTapPermutations(keys.Backspace, { indent: "                    ", modifierToVarName})}
+                key_was_consumed[${backspaceKeyIndex}] = true;
+                key_was_consumed[${rightThumbMod1}] = true;
+                // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+                return false;
+            }
+        }
         if (physical_key_is_down[${rightThumbMod1}]) {
             // 
             // arrow keys

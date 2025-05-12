@@ -84,6 +84,7 @@ export const sendKeyTapPermutations = (key, {indent, modifierToVarName})=> {
     return indenter({string:outputCodeChunks.join("\n"), by: indent||"", noLead:true})
 }
 export const keys = {
+    QK_BOOT: "QK_BOOT",
     XXXXXXX: "XXXXXXX",
     
     KC_0: "KC_0",
