@@ -8,11 +8,11 @@ Current Plan
 <!-- - left thumb modifier plus left pinky makes squiggly brackets above arrow keys -->
 - DONE: backspace is spacebar plus letter P
 - DONE: add programming button
-- Fix what happens when a non-combo is confirmed (replay press-down order)
-- enter is spacebar plus semicolon
-- tab is: fd combo
-- esc is sa combo
+- DONE: enter is spacebar plus semicolon
+- DONE: tab is: fd combo
+- DONE: esc is sa combo
 - comma and period are below arrow keys on spacebar, shift makes them <>'s
+- Fix what happens when a non-combo is confirmed (replay press-down order)
 - number is left thumb modifier, which doubles as space
     <!-- - underscore as jk combo -->
     - equals in up top corner

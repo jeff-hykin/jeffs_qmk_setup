@@ -251,7 +251,7 @@ let code = makeKeyboardCode(`
         key_was_consumed[index] = false;
         return false;
     }
-    
+
     // 
     // boot key
     // 
@@ -259,7 +259,32 @@ let code = makeKeyboardCode(`
         reset_keyboard();
         return false;
     }
-
+    
+    // 
+    // two key combos
+    // 
+        // "FD" combo
+        if (physical_key_is_down[${keyboard.leftHand.homeRow[0]}] && physical_key_is_down[${keyboard.leftHand.homeRow[1]}]) {
+            // 
+            // tab
+            // 
+            ${sendKeyTapPermutations(keys.Tab, { indent: "                ", modifierToVarName})}
+            key_was_consumed[${keyboard.leftHand.homeRow[0]}] = true;
+            key_was_consumed[${keyboard.leftHand.homeRow[1]}] = true;
+            // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+            return false;
+        }
+        // "AS" combo
+        if (physical_key_is_down[${keyboard.leftHand.homeRow[2]}] && physical_key_is_down[${keyboard.leftHand.homeRow[3]}]) {
+            // 
+            // Esc
+            // 
+            ${sendKeyTapPermutations(keys.Escape, { indent: "                ", modifierToVarName})}
+            key_was_consumed[${keyboard.leftHand.homeRow[2]}] = true;
+            key_was_consumed[${keyboard.leftHand.homeRow[3]}] = true;
+            // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+            return false;
+        }
     // 
     // rightThumbMod1 (arrowLayer)
     // 
@@ -346,6 +371,16 @@ let code = makeKeyboardCode(`
                     // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
                     return false;
                 }
+            // 
+            // return/enter
+            // 
+            if (index == ${keyboard.rightHand.homeRow[3]}) {
+                ${sendKeyTapPermutations(keys.KC_9, { indent: "                    ", modifierToVarName: {...modifierToVarName, leftShift: "true"}})}
+                key_was_consumed[${rightThumbMod1}] = true;
+                key_was_consumed[${keyboard.rightHand.homeRow[3]}] = true;
+                // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                return false;
+            }
             // 
             // parentheses 
             // 
