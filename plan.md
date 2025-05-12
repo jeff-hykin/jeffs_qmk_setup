@@ -1,6 +1,89 @@
+Current Plan
+- home row mod, but with two keys to trigger a modifier 
+    - ctrl is outer pinky
+- arrow keys with spacebar
+- brackets above arrow keys
+    - pinky plus spacebar makes brackets parentheses
+- left thumb modifier plus left pinky makes squiggly brackets above arrow keys
+- backspace is spacebar plus letter P
+- enter is spacebar plus semicolon
+- tab is: fd combo
+- esc is sa combo
+- comma and period are below arrow keys on spacebar, shift makes them <>'s
+- number is left thumb modifier, which doubles as space
+    <!-- - underscore as jk combo -->
+    - equals in up top corner
+    - underscore where . normally is
+    - /? where it normally is
+    - "plus" is h + number modifier
+    - minus is b + number modifier
+    - single quote is jk combo
+    - exclamation point right thumb modifier + letter G
+    - percent as yu combo
+    - at sign as left middle finger under right hand thumb modifier
+    - hash as left index finger under right hand thumb modifier
+    - dollar sign as letter T under right hand thumb modifier
+    - asterisk as jn combo
+    - caret as km combo
+    - ampersand as hb combo
+    - bar as gv combo
+    - backslash as io combo
+    - double quote as sdf combo
+    
+- TODO:
+    - numbers:
+        - dot
+        - comma
+        - zero
+        - plus
+        - minus
+        - equals
+        - 
+    - symbols:
+        - equals
+        - plus
+        - dash
+        - underscore
+        - single quote
+        - double quote
+        - backtick
+        - tilde
+        - forward slash
+        - question mark
+        - back slash
+        - bar (pipe)
+        - semicolon
+        - colon
+        - exclamation point
+        - at sign
+        - hash
+        - dollar sign
+        - percent sign
+        - caret
+        - ampersand
+        - asterisk
+    - mouse buttons
+    - scroll
+    - fn
+    - sound
+    - brightness
+
+Older thoughts:
+
 ideas:
 - full keyboard for each hand, but no meta key combinations
 - note: don't make any chord a subset of another chord; otherwise it can't activate on keydown
+
+challenging words for home row mod:
+- false
+- falls
+- last
+- ask
+- asm
+- fail
+- daunt
+- lapse
+
 
 layout:
 - no thumb layer
