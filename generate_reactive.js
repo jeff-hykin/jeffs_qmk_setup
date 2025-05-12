@@ -221,15 +221,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 import { keys, sendKeyTap, sendKeyTapPermutations } from "./tools.js"
 import { keyboard } from "./charybdis.js"
 
-const leftCtrlKey = keyboard.leftHand.homeRow[3]
+const leftCtrlKey = keyboard.leftHand.homeRow[4]
 const leftShiftKey = keyboard.leftHand.homeRow[2]
 const leftAltKey = keyboard.leftHand.homeRow[1]
 const leftGuiKey = keyboard.leftHand.homeRow[0]
 
-const rightCtrlKey = keyboard.rightHand.homeRow[3]
+const rightCtrlKey = keyboard.rightHand.homeRow[4]
 const rightShiftKey = keyboard.rightHand.homeRow[2]
 const rightAltKey = keyboard.rightHand.homeRow[1]
 const rightGuiKey = keyboard.rightHand.homeRow[0]
+
+const modifierToVarName = { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }
+
+const rightThumbMod1 = keyboard.rightHand.thumb[1]
+const rightThumbMod2 = keyboard.rightHand.thumb[0]
 
 let code = makeKeyboardCode(`
     // available data: uint16_t keycode, keyrecord_t *record, bool keydown, row, col, keys_down, some_other_physical_key_is_down, physical_key_is_down[row][col]
@@ -247,142 +252,222 @@ let code = makeKeyboardCode(`
     }
 
     // 
-    // spacebar
+    // rightThumbMod1 (arrowLayer)
     // 
-    if (index == ${keyboard.rightHand.thumb[0]}) {
-        if (keydown) {
-            return false; // do nothing on keydown (other than remember it)
-        // if not "consumed" 
-        } else {
-            // activate the normal key
-            ${sendKeyTapPermutations(keys.Spacebar, { indent: "                ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})}
-            return false;
+        if (index == ${rightThumbMod1}) {
+            if (keydown) {
+                return false; // do nothing on keydown (other than remember it)
+            // if not "consumed" 
+            } else {
+                // activate the normal key
+                ${sendKeyTapPermutations(keys.Spacebar, { indent: "                ", modifierToVarName})}
+                return false;
+            }
         }
-    }
     
     // 
-    // arrow keys
+    // rightThumbMod2 (numberLayer)
     // 
-        if (physical_key_is_down[${keyboard.rightHand.thumb[0]}]) {
-            // 
-            // up
-            // 
-            if (index == ${keyboard.rightHand.homeRowUp1[1]}) {
-                ${sendKeyTapPermutations(keys.Up, { indent: "                ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})}
-                memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+        if (index == ${rightThumbMod2}) {
+            if (keydown) {
+                return false; // do nothing on keydown (other than remember it)
+            // if not "consumed" 
+            } else {
+                // activate the normal key
+                ${sendKeyTapPermutations(keys.Spacebar, { indent: "                ", modifierToVarName})}
                 return false;
             }
+        }
+    // 
+    // spacebar modifier
+    // 
+        if (physical_key_is_down[${rightThumbMod1}]) {
             // 
-            // down
+            // arrow keys
             // 
-            if (index == ${keyboard.rightHand.homeRow[1]}) {
-                ${sendKeyTapPermutations(keys.Down, { indent: "                ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})}
-                memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
-                return false;
+                // 
+                // up
+                // 
+                if (index == ${keyboard.rightHand.homeRowUp1[1]}) {
+                    ${sendKeyTapPermutations(keys.Up, { indent: "                    ", modifierToVarName})}
+                    key_was_consumed[${keyboard.rightHand.homeRowUp1[1]}] = true;
+                    key_was_consumed[${rightThumbMod1}] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+                    return false;
+                }
+                // 
+                // down
+                // 
+                if (index == ${keyboard.rightHand.homeRow[1]}) {
+                    ${sendKeyTapPermutations(keys.Down, { indent: "                    ", modifierToVarName})}
+                    key_was_consumed[${rightThumbMod1}] = true;
+                    key_was_consumed[${keyboard.rightHand.homeRow[1]}] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+                    return false;
+                }
+                // 
+                // left
+                // 
+                if (index == ${keyboard.rightHand.homeRow[0]}) {
+                    ${sendKeyTapPermutations(keys.Left, { indent: "                    ", modifierToVarName})}
+                    key_was_consumed[${rightThumbMod1}] = true;
+                    key_was_consumed[${keyboard.rightHand.homeRow[0]}] = true;
+                    //memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+                    return false;
+                }
+                // 
+                // right
+                // 
+                if (index == ${keyboard.rightHand.homeRow[2]}) {
+                    ${sendKeyTapPermutations(keys.Right, { indent: "                    ", modifierToVarName})}
+                    key_was_consumed[${rightThumbMod1}] = true;
+                    key_was_consumed[${keyboard.rightHand.homeRow[2]}] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                    return false;
+                }
+            // 
+            // parentheses 
+            // 
+            if (physical_key_is_down[${rightThumbMod2}]) {
+                // 
+                // left
+                // 
+                if (index == ${keyboard.rightHand.homeRowUp1[0]}) {
+                    ${sendKeyTapPermutations(keys.KC_9, { indent: "                    ", modifierToVarName: {...modifierToVarName, leftShift: "true"}})}
+                    key_was_consumed[${rightThumbMod1}] = true;
+                    key_was_consumed[${rightThumbMod2}] = true;
+                    key_was_consumed[${keyboard.rightHand.homeRowUp1[0]}] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                    return false;
+                }
+                // 
+                // right
+                // 
+                if (index == ${keyboard.rightHand.homeRowUp1[2]}) {
+                    ${sendKeyTapPermutations(keys.KC_0, { indent: "                    ", modifierToVarName: {...modifierToVarName, leftShift: "true"}})}
+                    key_was_consumed[${rightThumbMod1}] = true;
+                    key_was_consumed[${rightThumbMod2}] = true;
+                    key_was_consumed[${keyboard.rightHand.homeRowUp1[2]}] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                    return false;
+                }
             }
             // 
-            // left
+            // brackets
             // 
-            if (index == ${keyboard.rightHand.homeRow[0]}) {
-                ${sendKeyTapPermutations(keys.Left, { indent: "                ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})}
-                memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
-                return false;
-            }
+                // 
+                // left
+                // 
+                if (index == ${keyboard.rightHand.homeRowUp1[0]}) {
+                    ${sendKeyTapPermutations(keys.KC_LEFT_BRACKET, { indent: "                    ", modifierToVarName})}
+                    key_was_consumed[${rightThumbMod1}] = true;
+                    key_was_consumed[${keyboard.rightHand.homeRowUp1[0]}] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                    return false;
+                }
+                // 
+                // right
+                // 
+                if (index == ${keyboard.rightHand.homeRowUp1[2]}) {
+                    ${sendKeyTapPermutations(keys.KC_RIGHT_BRACKET, { indent: "                    ", modifierToVarName})}
+                    key_was_consumed[${rightThumbMod1}] = true;
+                    key_was_consumed[${keyboard.rightHand.homeRowUp1[2]}] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                    return false;
+                }
             // 
-            // right
-            // 
-            if (index == ${keyboard.rightHand.homeRow[2]}) {
-                ${sendKeyTapPermutations(keys.Right, { indent: "                ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})}
-                memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
-                return false;
-            }
         }
     
     // 
     // home row mod
     // 
-        if (index == ${leftCtrlKey}) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                ${sendKeyTapPermutations(keys.KC_A,{ indent: "            ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})};
-                return false;
+        // 
+        // left hand
+        // 
+            if (index == ${leftCtrlKey}) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    ${sendKeyTapPermutations(keys.KC_A,{ indent: "                ", modifierToVarName})};
+                    return false;
+                }
             }
-        }
-        if (index == ${leftShiftKey}) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                ${sendKeyTapPermutations(keys.KC_S,{ indent: "            ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})};
-                return false;
+            if (index == ${leftShiftKey}) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    ${sendKeyTapPermutations(keys.KC_S,{ indent: "                ", modifierToVarName})};
+                    return false;
+                }
             }
-        }
-        if (index == ${leftAltKey}) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                ${sendKeyTapPermutations(keys.KC_D,{ indent: "            ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})};
-                return false;
+            if (index == ${leftAltKey}) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    ${sendKeyTapPermutations(keys.KC_D,{ indent: "                ", modifierToVarName})};
+                    return false;
+                }
             }
-        }
-        if (index == ${leftGuiKey}) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                ${sendKeyTapPermutations(keys.KC_F,{ indent: "            ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})};
-                return false;
+            if (index == ${leftGuiKey}) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    ${sendKeyTapPermutations(keys.KC_F,{ indent: "                ", modifierToVarName})};
+                    return false;
+                }
             }
-        }
         
-        
-        if (index == ${rightCtrlKey}) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                ${sendKeyTapPermutations(keys.KC_SEMICOLON,{ indent: "            ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})};
-                return false;
+        // 
+        // Right Hand
+        // 
+            if (index == ${rightCtrlKey}) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    ${sendKeyTapPermutations(keys.KC_SEMICOLON,{ indent: "                ", modifierToVarName})};
+                    return false;
+                }
             }
-        }
-        if (index == ${rightShiftKey}) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                ${sendKeyTapPermutations(keys.KC_L,{ indent: "            ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})};
-                return false;
+            if (index == ${rightShiftKey}) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    ${sendKeyTapPermutations(keys.KC_L,{ indent: "                ", modifierToVarName})};
+                    return false;
+                }
             }
-        }
-        if (index == ${rightAltKey}) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                ${sendKeyTapPermutations(keys.KC_K,{ indent: "            ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})};
-                return false;
+            if (index == ${rightAltKey}) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    ${sendKeyTapPermutations(keys.KC_K,{ indent: "                ", modifierToVarName})};
+                    return false;
+                }
             }
-        }
-        if (index == ${rightGuiKey}) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                ${sendKeyTapPermutations(keys.KC_J,{ indent: "            ", modifierToVarName: { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }})};
-                return false;
+            if (index == ${rightGuiKey}) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    ${sendKeyTapPermutations(keys.KC_J,{ indent: "                ", modifierToVarName})};
+                    return false;
+                }
             }
-        }
     
     
     // 

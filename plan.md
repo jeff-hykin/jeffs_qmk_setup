@@ -1,9 +1,10 @@
 Current Plan
-- home row mod, but with two keys to trigger a modifier 
+- DONE: home row mod
+    <!-- - but with two keys to trigger a modifier  -->
     - ctrl is outer pinky
-- arrow keys with spacebar
-- brackets above arrow keys
-    - pinky plus spacebar makes brackets parentheses
+- DONE: arrow keys with spacebar
+- DONE: brackets above arrow keys
+- parenthesis above arrow keys with both right thumb modifiers
 - left thumb modifier plus left pinky makes squiggly brackets above arrow keys
 - backspace is spacebar plus letter P
 - enter is spacebar plus semicolon
@@ -79,6 +80,7 @@ challenging words for home row mod:
 - falls
 - last
 - ask
+- keys
 - asm
 - fail
 - daunt
