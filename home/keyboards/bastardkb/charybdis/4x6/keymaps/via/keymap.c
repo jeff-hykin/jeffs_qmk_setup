@@ -212,7 +212,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // available data: uint16_t keycode, keyrecord_t *record, bool keydown, row, col, keys_down, some_other_physical_key_is_down, physical_key_is_down[row][col]
     bool key_pressed_on_left_hand = index == 5 || index == 4 || index == 3 || index == 2 || index == 1 || index == 0 || index == 11 || index == 10 || index == 9 || index == 8 || index == 7 || index == 6 || index == 17 || index == 16 || index == 15 || index == 14 || index == 13 || index == 12 || index == 23 || index == 22 || index == 21 || index == 20 || index == 19 || index == 18 || index == 27 || index == 28 || index == 25 || index == 29 || index == 26;
     
-    bool ctrl_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 43 : 13)];
+    bool ctrl_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 42 : 12)];
     bool shift_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 44 : 14)];
     bool alt_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 45 : 15)];
     bool gui_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 46 : 16)];
@@ -224,15 +224,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     // 
-    // spacebar
+    // rightThumbMod1 (arrowLayer)
     // 
-    if (index == 55) {
-        if (keydown) {
-            return false; // do nothing on keydown (other than remember it)
-        // if not "consumed" 
-        } else {
-            // activate the normal key
-            // KC_SPC + modifiers
+        if (index == 57) {
+            if (keydown) {
+                return false; // do nothing on keydown (other than remember it)
+            // if not "consumed" 
+            } else {
+                // activate the normal key
+                // KC_SPC + modifiers
                 if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
                     tap_code(KC_SPC);
                 } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
@@ -266,529 +266,774 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 } else if (shift_physical_key_is_down) {
                     tap_code16(LSFT(KC_SPC));
                 }
-            return false;
+                return false;
+            }
         }
-    }
     
     // 
-    // arrow keys
+    // rightThumbMod2 (numberLayer)
     // 
-        if (physical_key_is_down[55]) {
-            // 
-            // up
-            // 
-            if (index == 39) {
-                // KC_UP + modifiers
+        if (index == 55) {
+            if (keydown) {
+                return false; // do nothing on keydown (other than remember it)
+            // if not "consumed" 
+            } else {
+                // activate the normal key
+                // KC_SPC + modifiers
                 if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                    tap_code(KC_UP);
+                    tap_code(KC_SPC);
                 } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_UP)))));
+                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_SPC)))));
                 } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LCTL(LALT(LGUI(KC_UP))));
+                    tap_code16(LCTL(LALT(LGUI(KC_SPC))));
                 } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LALT(LGUI(KC_UP))));
+                    tap_code16(LSFT(LALT(LGUI(KC_SPC))));
                 } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LGUI(KC_UP))));
+                    tap_code16(LSFT(LCTL(LGUI(KC_SPC))));
                 } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LALT(KC_UP))));
+                    tap_code16(LSFT(LCTL(LALT(KC_SPC))));
                 } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LALT(LGUI(KC_UP)));
+                    tap_code16(LALT(LGUI(KC_SPC)));
                 } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LCTL(LGUI(KC_UP)));
+                    tap_code16(LCTL(LGUI(KC_SPC)));
                 } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LCTL(LALT(KC_UP)));
+                    tap_code16(LCTL(LALT(KC_SPC)));
                 } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LGUI(KC_UP)));
+                    tap_code16(LSFT(LGUI(KC_SPC)));
                 } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LSFT(LALT(KC_UP)));
+                    tap_code16(LSFT(LALT(KC_SPC)));
                 } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(KC_UP)));
+                    tap_code16(LSFT(LCTL(KC_SPC)));
                 } else if (gui_physical_key_is_down) {
-                    tap_code16(LGUI(KC_UP));
+                    tap_code16(LGUI(KC_SPC));
                 } else if (alt_physical_key_is_down) {
-                    tap_code16(LALT(KC_UP));
+                    tap_code16(LALT(KC_SPC));
                 } else if (ctrl_physical_key_is_down) {
-                    tap_code16(LCTL(KC_UP));
+                    tap_code16(LCTL(KC_SPC));
                 } else if (shift_physical_key_is_down) {
-                    tap_code16(LSFT(KC_UP));
+                    tap_code16(LSFT(KC_SPC));
                 }
-                memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
                 return false;
             }
+        }
+    // 
+    // spacebar modifier
+    // 
+        if (physical_key_is_down[57]) {
             // 
-            // down
+            // arrow keys
             // 
-            if (index == 45) {
-                // KC_DOWN + modifiers
-                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                    tap_code(KC_DOWN);
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_DOWN)))));
-                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LCTL(LALT(LGUI(KC_DOWN))));
-                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LALT(LGUI(KC_DOWN))));
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LGUI(KC_DOWN))));
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LALT(KC_DOWN))));
-                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LALT(LGUI(KC_DOWN)));
-                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LCTL(LGUI(KC_DOWN)));
-                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LCTL(LALT(KC_DOWN)));
-                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LGUI(KC_DOWN)));
-                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LSFT(LALT(KC_DOWN)));
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(KC_DOWN)));
-                } else if (gui_physical_key_is_down) {
-                    tap_code16(LGUI(KC_DOWN));
-                } else if (alt_physical_key_is_down) {
-                    tap_code16(LALT(KC_DOWN));
-                } else if (ctrl_physical_key_is_down) {
-                    tap_code16(LCTL(KC_DOWN));
-                } else if (shift_physical_key_is_down) {
-                    tap_code16(LSFT(KC_DOWN));
+                // 
+                // up
+                // 
+                if (index == 39) {
+                    // KC_UP + modifiers
+                    if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                        tap_code(KC_UP);
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(LGUI(KC_UP)))));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(LGUI(KC_UP))));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(LGUI(KC_UP))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LGUI(KC_UP))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(KC_UP))));
+                    } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LALT(LGUI(KC_UP)));
+                    } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LGUI(KC_UP)));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(KC_UP)));
+                    } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LGUI(KC_UP)));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(KC_UP)));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(KC_UP)));
+                    } else if (gui_physical_key_is_down) {
+                        tap_code16(LGUI(KC_UP));
+                    } else if (alt_physical_key_is_down) {
+                        tap_code16(LALT(KC_UP));
+                    } else if (ctrl_physical_key_is_down) {
+                        tap_code16(LCTL(KC_UP));
+                    } else if (shift_physical_key_is_down) {
+                        tap_code16(LSFT(KC_UP));
+                    }
+                    key_was_consumed[39] = true;
+                    key_was_consumed[57] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+                    return false;
                 }
-                memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
-                return false;
+                // 
+                // down
+                // 
+                if (index == 45) {
+                    // KC_DOWN + modifiers
+                    if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                        tap_code(KC_DOWN);
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(LGUI(KC_DOWN)))));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(LGUI(KC_DOWN))));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(LGUI(KC_DOWN))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LGUI(KC_DOWN))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(KC_DOWN))));
+                    } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LALT(LGUI(KC_DOWN)));
+                    } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LGUI(KC_DOWN)));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(KC_DOWN)));
+                    } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LGUI(KC_DOWN)));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(KC_DOWN)));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(KC_DOWN)));
+                    } else if (gui_physical_key_is_down) {
+                        tap_code16(LGUI(KC_DOWN));
+                    } else if (alt_physical_key_is_down) {
+                        tap_code16(LALT(KC_DOWN));
+                    } else if (ctrl_physical_key_is_down) {
+                        tap_code16(LCTL(KC_DOWN));
+                    } else if (shift_physical_key_is_down) {
+                        tap_code16(LSFT(KC_DOWN));
+                    }
+                    key_was_consumed[57] = true;
+                    key_was_consumed[45] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+                    return false;
+                }
+                // 
+                // left
+                // 
+                if (index == 46) {
+                    // KC_LEFT + modifiers
+                    if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                        tap_code(KC_LEFT);
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(LGUI(KC_LEFT)))));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(LGUI(KC_LEFT))));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(LGUI(KC_LEFT))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LGUI(KC_LEFT))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(KC_LEFT))));
+                    } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LALT(LGUI(KC_LEFT)));
+                    } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LGUI(KC_LEFT)));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(KC_LEFT)));
+                    } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LGUI(KC_LEFT)));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(KC_LEFT)));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(KC_LEFT)));
+                    } else if (gui_physical_key_is_down) {
+                        tap_code16(LGUI(KC_LEFT));
+                    } else if (alt_physical_key_is_down) {
+                        tap_code16(LALT(KC_LEFT));
+                    } else if (ctrl_physical_key_is_down) {
+                        tap_code16(LCTL(KC_LEFT));
+                    } else if (shift_physical_key_is_down) {
+                        tap_code16(LSFT(KC_LEFT));
+                    }
+                    key_was_consumed[57] = true;
+                    key_was_consumed[46] = true;
+                    //memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
+                    return false;
+                }
+                // 
+                // right
+                // 
+                if (index == 44) {
+                    // KC_RGHT + modifiers
+                    if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                        tap_code(KC_RGHT);
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(LGUI(KC_RGHT)))));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(LGUI(KC_RGHT))));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(LGUI(KC_RGHT))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LGUI(KC_RGHT))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(KC_RGHT))));
+                    } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LALT(LGUI(KC_RGHT)));
+                    } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LGUI(KC_RGHT)));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(KC_RGHT)));
+                    } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LGUI(KC_RGHT)));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(KC_RGHT)));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(KC_RGHT)));
+                    } else if (gui_physical_key_is_down) {
+                        tap_code16(LGUI(KC_RGHT));
+                    } else if (alt_physical_key_is_down) {
+                        tap_code16(LALT(KC_RGHT));
+                    } else if (ctrl_physical_key_is_down) {
+                        tap_code16(LCTL(KC_RGHT));
+                    } else if (shift_physical_key_is_down) {
+                        tap_code16(LSFT(KC_RGHT));
+                    }
+                    key_was_consumed[57] = true;
+                    key_was_consumed[44] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                    return false;
+                }
+            // 
+            // parentheses 
+            // 
+            if (physical_key_is_down[55]) {
+                // 
+                // left
+                // 
+                if (index == 40) {
+                    // KC_9 + modifiers
+                    if (!true && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                        tap_code(KC_9);
+                    } else if (true && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(LGUI(KC_9)))));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(LGUI(KC_9))));
+                    } else if (true && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(LGUI(KC_9))));
+                    } else if (true && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LGUI(KC_9))));
+                    } else if (true && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(KC_9))));
+                    } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LALT(LGUI(KC_9)));
+                    } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LGUI(KC_9)));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(KC_9)));
+                    } else if (true && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LGUI(KC_9)));
+                    } else if (true && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(KC_9)));
+                    } else if (true && ctrl_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(KC_9)));
+                    } else if (gui_physical_key_is_down) {
+                        tap_code16(LGUI(KC_9));
+                    } else if (alt_physical_key_is_down) {
+                        tap_code16(LALT(KC_9));
+                    } else if (ctrl_physical_key_is_down) {
+                        tap_code16(LCTL(KC_9));
+                    } else if (true) {
+                        tap_code16(LSFT(KC_9));
+                    }
+                    key_was_consumed[57] = true;
+                    key_was_consumed[55] = true;
+                    key_was_consumed[40] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                    return false;
+                }
+                // 
+                // right
+                // 
+                if (index == 38) {
+                    // KC_0 + modifiers
+                    if (!true && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                        tap_code(KC_0);
+                    } else if (true && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(LGUI(KC_0)))));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(LGUI(KC_0))));
+                    } else if (true && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(LGUI(KC_0))));
+                    } else if (true && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LGUI(KC_0))));
+                    } else if (true && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(KC_0))));
+                    } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LALT(LGUI(KC_0)));
+                    } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LGUI(KC_0)));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(KC_0)));
+                    } else if (true && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LGUI(KC_0)));
+                    } else if (true && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(KC_0)));
+                    } else if (true && ctrl_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(KC_0)));
+                    } else if (gui_physical_key_is_down) {
+                        tap_code16(LGUI(KC_0));
+                    } else if (alt_physical_key_is_down) {
+                        tap_code16(LALT(KC_0));
+                    } else if (ctrl_physical_key_is_down) {
+                        tap_code16(LCTL(KC_0));
+                    } else if (true) {
+                        tap_code16(LSFT(KC_0));
+                    }
+                    key_was_consumed[57] = true;
+                    key_was_consumed[55] = true;
+                    key_was_consumed[38] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                    return false;
+                }
             }
             // 
-            // left
+            // brackets
             // 
-            if (index == 46) {
-                // KC_LEFT + modifiers
-                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                    tap_code(KC_LEFT);
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_LEFT)))));
-                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LCTL(LALT(LGUI(KC_LEFT))));
-                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LALT(LGUI(KC_LEFT))));
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LGUI(KC_LEFT))));
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LALT(KC_LEFT))));
-                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LALT(LGUI(KC_LEFT)));
-                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LCTL(LGUI(KC_LEFT)));
-                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LCTL(LALT(KC_LEFT)));
-                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LGUI(KC_LEFT)));
-                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LSFT(LALT(KC_LEFT)));
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(KC_LEFT)));
-                } else if (gui_physical_key_is_down) {
-                    tap_code16(LGUI(KC_LEFT));
-                } else if (alt_physical_key_is_down) {
-                    tap_code16(LALT(KC_LEFT));
-                } else if (ctrl_physical_key_is_down) {
-                    tap_code16(LCTL(KC_LEFT));
-                } else if (shift_physical_key_is_down) {
-                    tap_code16(LSFT(KC_LEFT));
+                // 
+                // left
+                // 
+                if (index == 40) {
+                    // KC_LEFT_BRACKET + modifiers
+                    if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                        tap_code(KC_LEFT_BRACKET);
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(LGUI(KC_LEFT_BRACKET)))));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(LGUI(KC_LEFT_BRACKET))));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(LGUI(KC_LEFT_BRACKET))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LGUI(KC_LEFT_BRACKET))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(KC_LEFT_BRACKET))));
+                    } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LALT(LGUI(KC_LEFT_BRACKET)));
+                    } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LGUI(KC_LEFT_BRACKET)));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(KC_LEFT_BRACKET)));
+                    } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LGUI(KC_LEFT_BRACKET)));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(KC_LEFT_BRACKET)));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(KC_LEFT_BRACKET)));
+                    } else if (gui_physical_key_is_down) {
+                        tap_code16(LGUI(KC_LEFT_BRACKET));
+                    } else if (alt_physical_key_is_down) {
+                        tap_code16(LALT(KC_LEFT_BRACKET));
+                    } else if (ctrl_physical_key_is_down) {
+                        tap_code16(LCTL(KC_LEFT_BRACKET));
+                    } else if (shift_physical_key_is_down) {
+                        tap_code16(LSFT(KC_LEFT_BRACKET));
+                    }
+                    key_was_consumed[57] = true;
+                    key_was_consumed[40] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                    return false;
                 }
-                memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
-                return false;
-            }
-            // 
-            // right
-            // 
-            if (index == 44) {
-                // KC_RGHT + modifiers
-                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                    tap_code(KC_RGHT);
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_RGHT)))));
-                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LCTL(LALT(LGUI(KC_RGHT))));
-                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LALT(LGUI(KC_RGHT))));
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LGUI(KC_RGHT))));
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(LALT(KC_RGHT))));
-                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LALT(LGUI(KC_RGHT)));
-                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LCTL(LGUI(KC_RGHT)));
-                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LCTL(LALT(KC_RGHT)));
-                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                    tap_code16(LSFT(LGUI(KC_RGHT)));
-                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                    tap_code16(LSFT(LALT(KC_RGHT)));
-                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                    tap_code16(LSFT(LCTL(KC_RGHT)));
-                } else if (gui_physical_key_is_down) {
-                    tap_code16(LGUI(KC_RGHT));
-                } else if (alt_physical_key_is_down) {
-                    tap_code16(LALT(KC_RGHT));
-                } else if (ctrl_physical_key_is_down) {
-                    tap_code16(LCTL(KC_RGHT));
-                } else if (shift_physical_key_is_down) {
-                    tap_code16(LSFT(KC_RGHT));
+                // 
+                // right
+                // 
+                if (index == 38) {
+                    // KC_RIGHT_BRACKET + modifiers
+                    if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                        tap_code(KC_RIGHT_BRACKET);
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(LGUI(KC_RIGHT_BRACKET)))));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(LGUI(KC_RIGHT_BRACKET))));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(LGUI(KC_RIGHT_BRACKET))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LGUI(KC_RIGHT_BRACKET))));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(LALT(KC_RIGHT_BRACKET))));
+                    } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LALT(LGUI(KC_RIGHT_BRACKET)));
+                    } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LCTL(LGUI(KC_RIGHT_BRACKET)));
+                    } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LCTL(LALT(KC_RIGHT_BRACKET)));
+                    } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                        tap_code16(LSFT(LGUI(KC_RIGHT_BRACKET)));
+                    } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                        tap_code16(LSFT(LALT(KC_RIGHT_BRACKET)));
+                    } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                        tap_code16(LSFT(LCTL(KC_RIGHT_BRACKET)));
+                    } else if (gui_physical_key_is_down) {
+                        tap_code16(LGUI(KC_RIGHT_BRACKET));
+                    } else if (alt_physical_key_is_down) {
+                        tap_code16(LALT(KC_RIGHT_BRACKET));
+                    } else if (ctrl_physical_key_is_down) {
+                        tap_code16(LCTL(KC_RIGHT_BRACKET));
+                    } else if (shift_physical_key_is_down) {
+                        tap_code16(LSFT(KC_RIGHT_BRACKET));
+                    }
+                    key_was_consumed[57] = true;
+                    key_was_consumed[38] = true;
+                    // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed)); 
+                    return false;
                 }
-                memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
-                return false;
-            }
+            // 
         }
     
     // 
     // home row mod
     // 
-        if (index == 13) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                // KC_A + modifiers
-            if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                tap_code(KC_A);
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(LGUI(KC_A)))));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LALT(LGUI(KC_A))));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LALT(LGUI(KC_A))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LGUI(KC_A))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(KC_A))));
-            } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LALT(LGUI(KC_A)));
-            } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LGUI(KC_A)));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LCTL(LALT(KC_A)));
-            } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LGUI(KC_A)));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LALT(KC_A)));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(KC_A)));
-            } else if (gui_physical_key_is_down) {
-                tap_code16(LGUI(KC_A));
-            } else if (alt_physical_key_is_down) {
-                tap_code16(LALT(KC_A));
-            } else if (ctrl_physical_key_is_down) {
-                tap_code16(LCTL(KC_A));
-            } else if (shift_physical_key_is_down) {
-                tap_code16(LSFT(KC_A));
-            };
-                return false;
+        // 
+        // left hand
+        // 
+            if (index == 12) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    // KC_A + modifiers
+                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                    tap_code(KC_A);
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_A)))));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(LGUI(KC_A))));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(LGUI(KC_A))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LGUI(KC_A))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(KC_A))));
+                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LALT(LGUI(KC_A)));
+                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LGUI(KC_A)));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(KC_A)));
+                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LGUI(KC_A)));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(KC_A)));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(KC_A)));
+                } else if (gui_physical_key_is_down) {
+                    tap_code16(LGUI(KC_A));
+                } else if (alt_physical_key_is_down) {
+                    tap_code16(LALT(KC_A));
+                } else if (ctrl_physical_key_is_down) {
+                    tap_code16(LCTL(KC_A));
+                } else if (shift_physical_key_is_down) {
+                    tap_code16(LSFT(KC_A));
+                };
+                    return false;
+                }
             }
-        }
-        if (index == 14) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                // KC_S + modifiers
-            if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                tap_code(KC_S);
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(LGUI(KC_S)))));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LALT(LGUI(KC_S))));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LALT(LGUI(KC_S))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LGUI(KC_S))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(KC_S))));
-            } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LALT(LGUI(KC_S)));
-            } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LGUI(KC_S)));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LCTL(LALT(KC_S)));
-            } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LGUI(KC_S)));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LALT(KC_S)));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(KC_S)));
-            } else if (gui_physical_key_is_down) {
-                tap_code16(LGUI(KC_S));
-            } else if (alt_physical_key_is_down) {
-                tap_code16(LALT(KC_S));
-            } else if (ctrl_physical_key_is_down) {
-                tap_code16(LCTL(KC_S));
-            } else if (shift_physical_key_is_down) {
-                tap_code16(LSFT(KC_S));
-            };
-                return false;
+            if (index == 14) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    // KC_S + modifiers
+                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                    tap_code(KC_S);
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_S)))));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(LGUI(KC_S))));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(LGUI(KC_S))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LGUI(KC_S))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(KC_S))));
+                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LALT(LGUI(KC_S)));
+                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LGUI(KC_S)));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(KC_S)));
+                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LGUI(KC_S)));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(KC_S)));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(KC_S)));
+                } else if (gui_physical_key_is_down) {
+                    tap_code16(LGUI(KC_S));
+                } else if (alt_physical_key_is_down) {
+                    tap_code16(LALT(KC_S));
+                } else if (ctrl_physical_key_is_down) {
+                    tap_code16(LCTL(KC_S));
+                } else if (shift_physical_key_is_down) {
+                    tap_code16(LSFT(KC_S));
+                };
+                    return false;
+                }
             }
-        }
-        if (index == 15) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                // KC_D + modifiers
-            if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                tap_code(KC_D);
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(LGUI(KC_D)))));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LALT(LGUI(KC_D))));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LALT(LGUI(KC_D))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LGUI(KC_D))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(KC_D))));
-            } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LALT(LGUI(KC_D)));
-            } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LGUI(KC_D)));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LCTL(LALT(KC_D)));
-            } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LGUI(KC_D)));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LALT(KC_D)));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(KC_D)));
-            } else if (gui_physical_key_is_down) {
-                tap_code16(LGUI(KC_D));
-            } else if (alt_physical_key_is_down) {
-                tap_code16(LALT(KC_D));
-            } else if (ctrl_physical_key_is_down) {
-                tap_code16(LCTL(KC_D));
-            } else if (shift_physical_key_is_down) {
-                tap_code16(LSFT(KC_D));
-            };
-                return false;
+            if (index == 15) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    // KC_D + modifiers
+                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                    tap_code(KC_D);
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_D)))));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(LGUI(KC_D))));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(LGUI(KC_D))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LGUI(KC_D))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(KC_D))));
+                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LALT(LGUI(KC_D)));
+                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LGUI(KC_D)));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(KC_D)));
+                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LGUI(KC_D)));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(KC_D)));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(KC_D)));
+                } else if (gui_physical_key_is_down) {
+                    tap_code16(LGUI(KC_D));
+                } else if (alt_physical_key_is_down) {
+                    tap_code16(LALT(KC_D));
+                } else if (ctrl_physical_key_is_down) {
+                    tap_code16(LCTL(KC_D));
+                } else if (shift_physical_key_is_down) {
+                    tap_code16(LSFT(KC_D));
+                };
+                    return false;
+                }
             }
-        }
-        if (index == 16) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                // KC_F + modifiers
-            if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                tap_code(KC_F);
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(LGUI(KC_F)))));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LALT(LGUI(KC_F))));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LALT(LGUI(KC_F))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LGUI(KC_F))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(KC_F))));
-            } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LALT(LGUI(KC_F)));
-            } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LGUI(KC_F)));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LCTL(LALT(KC_F)));
-            } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LGUI(KC_F)));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LALT(KC_F)));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(KC_F)));
-            } else if (gui_physical_key_is_down) {
-                tap_code16(LGUI(KC_F));
-            } else if (alt_physical_key_is_down) {
-                tap_code16(LALT(KC_F));
-            } else if (ctrl_physical_key_is_down) {
-                tap_code16(LCTL(KC_F));
-            } else if (shift_physical_key_is_down) {
-                tap_code16(LSFT(KC_F));
-            };
-                return false;
+            if (index == 16) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    // KC_F + modifiers
+                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                    tap_code(KC_F);
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_F)))));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(LGUI(KC_F))));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(LGUI(KC_F))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LGUI(KC_F))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(KC_F))));
+                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LALT(LGUI(KC_F)));
+                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LGUI(KC_F)));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(KC_F)));
+                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LGUI(KC_F)));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(KC_F)));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(KC_F)));
+                } else if (gui_physical_key_is_down) {
+                    tap_code16(LGUI(KC_F));
+                } else if (alt_physical_key_is_down) {
+                    tap_code16(LALT(KC_F));
+                } else if (ctrl_physical_key_is_down) {
+                    tap_code16(LCTL(KC_F));
+                } else if (shift_physical_key_is_down) {
+                    tap_code16(LSFT(KC_F));
+                };
+                    return false;
+                }
             }
-        }
         
-        
-        if (index == 43) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                // KC_SEMICOLON + modifiers
-            if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                tap_code(KC_SEMICOLON);
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(LGUI(KC_SEMICOLON)))));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LALT(LGUI(KC_SEMICOLON))));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LALT(LGUI(KC_SEMICOLON))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LGUI(KC_SEMICOLON))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(KC_SEMICOLON))));
-            } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LALT(LGUI(KC_SEMICOLON)));
-            } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LGUI(KC_SEMICOLON)));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LCTL(LALT(KC_SEMICOLON)));
-            } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LGUI(KC_SEMICOLON)));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LALT(KC_SEMICOLON)));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(KC_SEMICOLON)));
-            } else if (gui_physical_key_is_down) {
-                tap_code16(LGUI(KC_SEMICOLON));
-            } else if (alt_physical_key_is_down) {
-                tap_code16(LALT(KC_SEMICOLON));
-            } else if (ctrl_physical_key_is_down) {
-                tap_code16(LCTL(KC_SEMICOLON));
-            } else if (shift_physical_key_is_down) {
-                tap_code16(LSFT(KC_SEMICOLON));
-            };
-                return false;
+        // 
+        // Right Hand
+        // 
+            if (index == 42) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    // KC_SEMICOLON + modifiers
+                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                    tap_code(KC_SEMICOLON);
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_SEMICOLON)))));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(LGUI(KC_SEMICOLON))));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(LGUI(KC_SEMICOLON))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LGUI(KC_SEMICOLON))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(KC_SEMICOLON))));
+                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LALT(LGUI(KC_SEMICOLON)));
+                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LGUI(KC_SEMICOLON)));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(KC_SEMICOLON)));
+                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LGUI(KC_SEMICOLON)));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(KC_SEMICOLON)));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(KC_SEMICOLON)));
+                } else if (gui_physical_key_is_down) {
+                    tap_code16(LGUI(KC_SEMICOLON));
+                } else if (alt_physical_key_is_down) {
+                    tap_code16(LALT(KC_SEMICOLON));
+                } else if (ctrl_physical_key_is_down) {
+                    tap_code16(LCTL(KC_SEMICOLON));
+                } else if (shift_physical_key_is_down) {
+                    tap_code16(LSFT(KC_SEMICOLON));
+                };
+                    return false;
+                }
             }
-        }
-        if (index == 44) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                // KC_L + modifiers
-            if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                tap_code(KC_L);
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(LGUI(KC_L)))));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LALT(LGUI(KC_L))));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LALT(LGUI(KC_L))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LGUI(KC_L))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(KC_L))));
-            } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LALT(LGUI(KC_L)));
-            } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LGUI(KC_L)));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LCTL(LALT(KC_L)));
-            } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LGUI(KC_L)));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LALT(KC_L)));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(KC_L)));
-            } else if (gui_physical_key_is_down) {
-                tap_code16(LGUI(KC_L));
-            } else if (alt_physical_key_is_down) {
-                tap_code16(LALT(KC_L));
-            } else if (ctrl_physical_key_is_down) {
-                tap_code16(LCTL(KC_L));
-            } else if (shift_physical_key_is_down) {
-                tap_code16(LSFT(KC_L));
-            };
-                return false;
+            if (index == 44) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    // KC_L + modifiers
+                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                    tap_code(KC_L);
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_L)))));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(LGUI(KC_L))));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(LGUI(KC_L))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LGUI(KC_L))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(KC_L))));
+                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LALT(LGUI(KC_L)));
+                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LGUI(KC_L)));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(KC_L)));
+                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LGUI(KC_L)));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(KC_L)));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(KC_L)));
+                } else if (gui_physical_key_is_down) {
+                    tap_code16(LGUI(KC_L));
+                } else if (alt_physical_key_is_down) {
+                    tap_code16(LALT(KC_L));
+                } else if (ctrl_physical_key_is_down) {
+                    tap_code16(LCTL(KC_L));
+                } else if (shift_physical_key_is_down) {
+                    tap_code16(LSFT(KC_L));
+                };
+                    return false;
+                }
             }
-        }
-        if (index == 45) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                // KC_K + modifiers
-            if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                tap_code(KC_K);
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(LGUI(KC_K)))));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LALT(LGUI(KC_K))));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LALT(LGUI(KC_K))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LGUI(KC_K))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(KC_K))));
-            } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LALT(LGUI(KC_K)));
-            } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LGUI(KC_K)));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LCTL(LALT(KC_K)));
-            } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LGUI(KC_K)));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LALT(KC_K)));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(KC_K)));
-            } else if (gui_physical_key_is_down) {
-                tap_code16(LGUI(KC_K));
-            } else if (alt_physical_key_is_down) {
-                tap_code16(LALT(KC_K));
-            } else if (ctrl_physical_key_is_down) {
-                tap_code16(LCTL(KC_K));
-            } else if (shift_physical_key_is_down) {
-                tap_code16(LSFT(KC_K));
-            };
-                return false;
+            if (index == 45) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    // KC_K + modifiers
+                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                    tap_code(KC_K);
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_K)))));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(LGUI(KC_K))));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(LGUI(KC_K))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LGUI(KC_K))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(KC_K))));
+                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LALT(LGUI(KC_K)));
+                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LGUI(KC_K)));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(KC_K)));
+                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LGUI(KC_K)));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(KC_K)));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(KC_K)));
+                } else if (gui_physical_key_is_down) {
+                    tap_code16(LGUI(KC_K));
+                } else if (alt_physical_key_is_down) {
+                    tap_code16(LALT(KC_K));
+                } else if (ctrl_physical_key_is_down) {
+                    tap_code16(LCTL(KC_K));
+                } else if (shift_physical_key_is_down) {
+                    tap_code16(LSFT(KC_K));
+                };
+                    return false;
+                }
             }
-        }
-        if (index == 46) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                // KC_J + modifiers
-            if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
-                tap_code(KC_J);
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(LGUI(KC_J)))));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LALT(LGUI(KC_J))));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LALT(LGUI(KC_J))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LGUI(KC_J))));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(LALT(KC_J))));
-            } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LALT(LGUI(KC_J)));
-            } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LCTL(LGUI(KC_J)));
-            } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LCTL(LALT(KC_J)));
-            } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
-                tap_code16(LSFT(LGUI(KC_J)));
-            } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
-                tap_code16(LSFT(LALT(KC_J)));
-            } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
-                tap_code16(LSFT(LCTL(KC_J)));
-            } else if (gui_physical_key_is_down) {
-                tap_code16(LGUI(KC_J));
-            } else if (alt_physical_key_is_down) {
-                tap_code16(LALT(KC_J));
-            } else if (ctrl_physical_key_is_down) {
-                tap_code16(LCTL(KC_J));
-            } else if (shift_physical_key_is_down) {
-                tap_code16(LSFT(KC_J));
-            };
-                return false;
+            if (index == 46) {
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
+                // if not "consumed" 
+                } else {
+                    // activate the normal key
+                    // KC_J + modifiers
+                if (!shift_physical_key_is_down && !ctrl_physical_key_is_down && !alt_physical_key_is_down && !gui_physical_key_is_down) {
+                    tap_code(KC_J);
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(LGUI(KC_J)))));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(LGUI(KC_J))));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(LGUI(KC_J))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LGUI(KC_J))));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(LALT(KC_J))));
+                } else if (alt_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LALT(LGUI(KC_J)));
+                } else if (ctrl_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LCTL(LGUI(KC_J)));
+                } else if (ctrl_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LCTL(LALT(KC_J)));
+                } else if (shift_physical_key_is_down && gui_physical_key_is_down) {
+                    tap_code16(LSFT(LGUI(KC_J)));
+                } else if (shift_physical_key_is_down && alt_physical_key_is_down) {
+                    tap_code16(LSFT(LALT(KC_J)));
+                } else if (shift_physical_key_is_down && ctrl_physical_key_is_down) {
+                    tap_code16(LSFT(LCTL(KC_J)));
+                } else if (gui_physical_key_is_down) {
+                    tap_code16(LGUI(KC_J));
+                } else if (alt_physical_key_is_down) {
+                    tap_code16(LALT(KC_J));
+                } else if (ctrl_physical_key_is_down) {
+                    tap_code16(LCTL(KC_J));
+                } else if (shift_physical_key_is_down) {
+                    tap_code16(LSFT(KC_J));
+                };
+                    return false;
+                }
             }
-        }
     
     
     // 
