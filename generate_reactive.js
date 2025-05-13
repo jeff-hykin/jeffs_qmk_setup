@@ -185,19 +185,20 @@ return false;
 //         uint16_t time
 //     }
 
-const uint16_t key_count = MATRIX_ROWS*MATRIX_COLS;
+bool handle_key_event(uint16_t keycode, keyrecord_t *record, bool physical_key_is_down[MATRIX_ROWS * MATRIX_COLS], uint16_t keys_down, uint16_t index, uint8_t row, uint8_t col, bool key_is_going_down, bool some_other_physical_key_is_down);
+
+${code}
+
 uint16_t keys_down = 0;
-bool key_was_consumed[MATRIX_ROWS*MATRIX_COLS] = {0};
 bool physical_key_is_down[MATRIX_ROWS*MATRIX_COLS] = {0};
-bool combo_was_activated = false;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // setup
     uint8_t row = record->event.key.row;
     uint8_t col = record->event.key.col;
     uint16_t index = row * MATRIX_COLS + col;
-    const bool keydown = record->event.pressed;
+    const bool key_is_going_down = record->event.pressed;
     bool some_other_physical_key_is_down = keys_down >= 1;
-    if (keydown) {
+    if (key_is_going_down) {
         keys_down++;
         physical_key_is_down[index] = true;
     } else {
@@ -206,16 +207,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     if (false && some_other_physical_key_is_down) {} // defeat the "warning not used" check
     
-    // for (uint16_t other_index = 0; other_index < key_count; other_index++) {
-    //     if (physical_key_is_down[other_index] && other_index != index) {
-    //         some_other_physical_key_is_down = true;
-    //         break;
-    //     }
-    // }
-    
-    ${code}
-    return true;
-};`
+    return handle_key_event(keycode, record, physical_key_is_down, keys_down, index, row, col, key_is_going_down, some_other_physical_key_is_down);
+};
+`
 }
 
 import { keys, sendKeyTap, sendKeyTapPermutations } from "./tools.js"
@@ -238,7 +232,13 @@ const rightThumbMod2 = keyboard.rightHand.thumb[0]
 const backspaceKeyIndex = keyboard.rightHand.homeRowUp1[3]
 
 let code = makeKeyboardCode(`
-    // available data: uint16_t keycode, keyrecord_t *record, bool keydown, row, col, keys_down, some_other_physical_key_is_down, physical_key_is_down[row][col]
+bool key_was_consumed[MATRIX_ROWS*MATRIX_COLS] = {0};
+#define number_of_physical_keys_that_can_be_down_at_the_same_time 30 // realistically on a human hand (three keys per finger)
+uint16_t key_press_history[number_of_physical_keys_that_can_be_down_at_the_same_time] = {0};
+bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_key_is_down[MATRIX_ROWS * MATRIX_COLS], uint16_t keys_down, uint16_t index, uint8_t row, uint8_t col, bool key_is_going_down, bool some_other_physical_key_is_down) {
+    if (key_is_going_down) {
+        key_press_history[keys_down] = index;
+    }
     bool key_pressed_on_left_hand = ${Object.values(keyboard.leftHand).map(Object.values).flat(1).map(each=>`index == ${each}`).join(" || ")};
     
     bool ctrl_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? ${rightCtrlKey} : ${leftCtrlKey})];
@@ -247,7 +247,7 @@ let code = makeKeyboardCode(`
     bool gui_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? ${rightGuiKey} : ${leftGuiKey})];
     
     // do nothing on keyup of any "consumed" key
-    if (!keydown && key_was_consumed[index]) {
+    if (!key_is_going_down && key_was_consumed[index]) {
         key_was_consumed[index] = false;
         return false;
     }
@@ -289,8 +289,8 @@ let code = makeKeyboardCode(`
     // rightThumbMod1 (arrowLayer)
     // 
         if (index == ${rightThumbMod1}) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
+            if (key_is_going_down) {
+                return false; // do nothing on key_is_going_down (other than remember it)
             // if not "consumed" 
             } else {
                 // activate the normal key
@@ -303,8 +303,8 @@ let code = makeKeyboardCode(`
     // rightThumbMod2 (numberLayer)
     // 
         if (index == ${rightThumbMod2}) {
-            if (keydown) {
-                return false; // do nothing on keydown (other than remember it)
+            if (key_is_going_down) {
+                return false; // do nothing on key_is_going_down (other than remember it)
             // if not "consumed" 
             } else {
                 // activate the normal key
@@ -441,8 +441,8 @@ let code = makeKeyboardCode(`
         // left hand
         // 
             if (index == ${leftCtrlKey}) {
-                if (keydown) {
-                    return false; // do nothing on keydown (other than remember it)
+                if (key_is_going_down) {
+                    return false; // do nothing on key_is_going_down (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -451,8 +451,8 @@ let code = makeKeyboardCode(`
                 }
             }
             if (index == ${leftShiftKey}) {
-                if (keydown) {
-                    return false; // do nothing on keydown (other than remember it)
+                if (key_is_going_down) {
+                    return false; // do nothing on key_is_going_down (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -461,8 +461,8 @@ let code = makeKeyboardCode(`
                 }
             }
             if (index == ${leftAltKey}) {
-                if (keydown) {
-                    return false; // do nothing on keydown (other than remember it)
+                if (key_is_going_down) {
+                    return false; // do nothing on key_is_going_down (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -471,8 +471,8 @@ let code = makeKeyboardCode(`
                 }
             }
             if (index == ${leftGuiKey}) {
-                if (keydown) {
-                    return false; // do nothing on keydown (other than remember it)
+                if (key_is_going_down) {
+                    return false; // do nothing on key_is_going_down (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -485,8 +485,8 @@ let code = makeKeyboardCode(`
         // Right Hand
         // 
             if (index == ${rightCtrlKey}) {
-                if (keydown) {
-                    return false; // do nothing on keydown (other than remember it)
+                if (key_is_going_down) {
+                    return false; // do nothing on key_is_going_down (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -495,8 +495,8 @@ let code = makeKeyboardCode(`
                 }
             }
             if (index == ${rightShiftKey}) {
-                if (keydown) {
-                    return false; // do nothing on keydown (other than remember it)
+                if (key_is_going_down) {
+                    return false; // do nothing on key_is_going_down (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -505,8 +505,8 @@ let code = makeKeyboardCode(`
                 }
             }
             if (index == ${rightAltKey}) {
-                if (keydown) {
-                    return false; // do nothing on keydown (other than remember it)
+                if (key_is_going_down) {
+                    return false; // do nothing on key_is_going_down (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -515,8 +515,8 @@ let code = makeKeyboardCode(`
                 }
             }
             if (index == ${rightGuiKey}) {
-                if (keydown) {
-                    return false; // do nothing on keydown (other than remember it)
+                if (key_is_going_down) {
+                    return false; // do nothing on key_is_going_down (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -555,7 +555,7 @@ let code = makeKeyboardCode(`
     // 
     // printout helper
     // 
-        if (keydown) {
+        if (key_is_going_down) {
             
             if (index == 1) {
                 tap_code(KC_1);
@@ -918,8 +918,8 @@ let code = makeKeyboardCode(`
             return false;
         }
 
-        return false;
-`)
+    return false;
+}`)
 
 // console.log(code)
 import { FileSystem, glob } from "https://deno.land/x/quickr@0.8.1/main/file_system.js"

@@ -180,36 +180,16 @@ return false;
 //         uint16_t time
 //     }
 
-const uint16_t key_count = MATRIX_ROWS*MATRIX_COLS;
-uint16_t keys_down = 0;
+bool handle_key_event(uint16_t keycode, keyrecord_t *record, bool physical_key_is_down[MATRIX_ROWS * MATRIX_COLS], uint16_t keys_down, uint16_t index, uint8_t row, uint8_t col, bool keydown, bool some_other_physical_key_is_down);
+
+
 bool key_was_consumed[MATRIX_ROWS*MATRIX_COLS] = {0};
-bool physical_key_is_down[MATRIX_ROWS*MATRIX_COLS] = {0};
-bool combo_was_activated = false;
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    // setup
-    uint8_t row = record->event.key.row;
-    uint8_t col = record->event.key.col;
-    uint16_t index = row * MATRIX_COLS + col;
-    const bool keydown = record->event.pressed;
-    bool some_other_physical_key_is_down = keys_down >= 1;
+#define number_of_physical_keys_that_can_be_down_at_the_same_time 30 // realistically on a human hand (three keys per finger)
+uint16_t key_press_history[number_of_physical_keys_that_can_be_down_at_the_same_time] = {0};
+bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_key_is_down[MATRIX_ROWS * MATRIX_COLS], uint16_t keys_down, uint16_t index, uint8_t row, uint8_t col, bool keydown, bool some_other_physical_key_is_down) {
     if (keydown) {
-        keys_down++;
-        physical_key_is_down[index] = true;
-    } else {
-        keys_down--;
-        physical_key_is_down[index] = false;
+        key_press_history[keys_down] = index;
     }
-    if (false && some_other_physical_key_is_down) {} // defeat the "warning not used" check
-    
-    // for (uint16_t other_index = 0; other_index < key_count; other_index++) {
-    //     if (physical_key_is_down[other_index] && other_index != index) {
-    //         some_other_physical_key_is_down = true;
-    //         break;
-    //     }
-    // }
-    
-    
-    // available data: uint16_t keycode, keyrecord_t *record, bool keydown, row, col, keys_down, some_other_physical_key_is_down, physical_key_is_down[row][col]
     bool key_pressed_on_left_hand = index == 5 || index == 4 || index == 3 || index == 2 || index == 1 || index == 0 || index == 11 || index == 10 || index == 9 || index == 8 || index == 7 || index == 6 || index == 17 || index == 16 || index == 15 || index == 14 || index == 13 || index == 12 || index == 23 || index == 22 || index == 21 || index == 20 || index == 19 || index == 18 || index == 27 || index == 28 || index == 25 || index == 29 || index == 26;
     
     bool ctrl_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 42 : 12)];
@@ -1614,7 +1594,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
 
-        return false;
+    return false;
+}
 
-    return true;
+uint16_t keys_down = 0;
+bool physical_key_is_down[MATRIX_ROWS*MATRIX_COLS] = {0};
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // setup
+    uint8_t row = record->event.key.row;
+    uint8_t col = record->event.key.col;
+    uint16_t index = row * MATRIX_COLS + col;
+    const bool keydown = record->event.pressed;
+    bool some_other_physical_key_is_down = keys_down >= 1;
+    if (keydown) {
+        keys_down++;
+        physical_key_is_down[index] = true;
+    } else {
+        keys_down--;
+        physical_key_is_down[index] = false;
+    }
+    if (false && some_other_physical_key_is_down) {} // defeat the "warning not used" check
+    
+    return handle_key_event(keycode, record, physical_key_is_down, keys_down, index, row, col, keydown, some_other_physical_key_is_down);
 };
