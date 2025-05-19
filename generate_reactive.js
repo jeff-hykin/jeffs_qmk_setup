@@ -1,7 +1,11 @@
 #!/usr/bin/env -S deno run --allow-all
 
 import { capitalize, indent, toCamelCase, digitsToEnglishArray, toPascalCase, toKebabCase, toSnakeCase, toScreamingKebabCase, toScreamingSnakeCase, toRepresentation, toString, regex, findAll, iterativelyFindAll, escapeRegexMatch, escapeRegexReplace, extractFirst, isValidIdentifier, removeCommonPrefix, didYouMean } from "https://deno.land/x/good@1.13.1.0/string.js"
-    
+import { zipLong } from 'https://esm.sh/gh/jeff-hykin/good-js@1.17.1.0/source/flattened/zip_long.js'
+import { zipLong as zip } from 'https://esm.sh/gh/jeff-hykin/good-js@1.17.1.0/source/flattened/zip_long.js'
+import { zipShort } from 'https://esm.sh/gh/jeff-hykin/good-js@1.17.1.0/source/flattened/zip_short.js'
+
+
 const makeKeyboardCode = (code) => {
     return `/**
  * Copyright 2021 Charly Delay <charly@codesink.dev> (@0xcharly)
@@ -215,22 +219,80 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 import { keys, sendKeyTap, sendKeyTapPermutations } from "./tools.js"
 import { keyboard } from "./charybdis.js"
 
-const leftCtrlKey = keyboard.leftHand.homeRow[4]
-const leftShiftKey = keyboard.leftHand.homeRow[2]
-const leftAltKey = keyboard.leftHand.homeRow[1]
-const leftGuiKey = keyboard.leftHand.homeRow[0]
+// 
+// setup standard / default mapping
+// 
+    const leftHandDefaultKeys = [
+        'qwert',
+        'asdfg',
+        '_zxcv',
+    ]
+    const rightHandDefaultKeys = [
+        'yuiop',
+        'hjkl_',
+        'bnm__',
+    ]
+    const letterToIndex = {}
+    let indexToKeyCode = {}
+    for (let [rowName, rowLetters] of zipLong(["homeRowUp1", "homeRow", "homeRowDown1"], [...leftHandDefaultKeys])) {
+        for (let [letter, index] of zipShort(rowLetters, Object.values(keyboard.leftHand[rowName]).toReversed())) {
+            if (letter == '_') {
+                continue
+            }
+            letterToIndex[letter] = index
+            indexToKeyCode[index] = `KC_${letter.toUpperCase()}`
+        }
+    }
+    for (let [rowName, rowLetters] of zipLong(["homeRowUp1", "homeRow", "homeRowDown1"], [...rightHandDefaultKeys])) {
+        for (let [letter, index] of zipShort(rowLetters, Object.values(keyboard.rightHand[rowName]))) {
+            if (letter == '_') {
+                continue
+            }
+            letterToIndex[letter] = index
+            indexToKeyCode[index] = `KC_${letter.toUpperCase()}`
+        }
+    }
 
-const rightCtrlKey = keyboard.rightHand.homeRow[4]
-const rightShiftKey = keyboard.rightHand.homeRow[2]
-const rightAltKey = keyboard.rightHand.homeRow[1]
-const rightGuiKey = keyboard.rightHand.homeRow[0]
+    const standardMapping = {
+        ...indexToKeyCode,
+        [keyboard.rightHand.homeRow[4]]: keys.KC_SEMICOLON,
+        [keyboard.rightHand.homeRowDown1[3]]: keys.XXXXXXX,
+        [keyboard.rightHand.homeRowDown1[4]]: keys.KC_SLASH,
+    }
 
-const modifierToVarName = { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }
+// 
+// setup home row mod mapping
+// 
+    const leftCtrlKey = keyboard.leftHand.homeRow[4]
+    const leftShiftKey = keyboard.leftHand.homeRow[2]
+    const leftAltKey = keyboard.leftHand.homeRow[1]
+    const leftGuiKey = keyboard.leftHand.homeRow[0]
 
-const rightThumbMod1 = keyboard.rightHand.thumb[1]
-const rightThumbMod2 = keyboard.rightHand.thumb[0]
+    const rightCtrlKey = keyboard.rightHand.homeRow[4]
+    const rightShiftKey = keyboard.rightHand.homeRow[2]
+    const rightAltKey = keyboard.rightHand.homeRow[1]
+    const rightGuiKey = keyboard.rightHand.homeRow[0]
+
+    const modifierToVarName = { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }
+
+// 
+// extra mods
+// 
+    const rightThumbMod1 = keyboard.rightHand.thumb[1]
+    const rightThumbMod2 = keyboard.rightHand.thumb[0]
+
+// 
+// combos
+// 
+    // three key combos
+    let combos = [
+        "fd", 
+        "sa",
+    ]
+
+console.debug(`rightThumbMod1 is:`,rightThumbMod1)
+
 const backspaceKeyIndex = keyboard.rightHand.homeRowUp1[3]
-
 let code = makeKeyboardCode(`
 bool key_was_consumed[MATRIX_ROWS*MATRIX_COLS] = {0};
 #define number_of_physical_keys_that_can_be_down_at_the_same_time 30 // realistically on a human hand (three keys per finger)
@@ -322,7 +384,12 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
             if (index == ${backspaceKeyIndex}) {
                 ${sendKeyTapPermutations(keys.Backspace, { indent: "                    ", modifierToVarName})}
                 key_was_consumed[${backspaceKeyIndex}] = true;
-                key_was_consumed[${rightThumbMod1}] = true;
+                if (physical_key_is_down[${rightThumbMod2}]) {
+                    key_was_consumed[${rightThumbMod2}] = true;
+                }
+                if (physical_key_is_down[${rightThumbMod1}]) {
+                    key_was_consumed[${rightThumbMod1}] = true;
+                }
                 // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
                 return false;
             }

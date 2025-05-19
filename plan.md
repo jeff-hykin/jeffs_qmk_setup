@@ -11,8 +11,12 @@ Current Plan
 - DONE: enter is spacebar plus semicolon
 - DONE: tab is: fd combo
 - DONE: esc is sa combo
-- comma and period are below arrow keys on spacebar, shift makes them <>'s
+- Mouse buttons as left thumb buttons
 - Fix what happens when a non-combo is confirmed (replay press-down order)
+    - DONE: make a key-history array
+    - figure how/when to apply the array
+- Scroll as left thumb button (test if it works with modifiers in blender)
+- comma and period are below arrow keys on spacebar, shift makes them <>'s
 - number is left thumb modifier, which doubles as space
     <!-- - underscore as jk combo -->
     - equals in up top corner
@@ -34,46 +38,67 @@ Current Plan
     - double quote as sdf combo
     
 - TODO:
-    - numbers:
-        - dot
-        - comma
-        - zero
-        - plus
-        - minus
-        - equals
-        - 
-    - symbols:
-        - equals
-        - plus
-        - dash
-        - underscore
-        - single quote
-        - double quote
-        - backtick
-        - tilde
-        - forward slash
-        - question mark
-        - back slash
-        - bar (pipe)
-        - semicolon
-        - colon
-        - exclamation point
-        - at sign
-        - hash
-        - dollar sign
-        - percent sign
-        - caret
-        - ampersand
-        - asterisk
-    - mouse buttons
     - scroll
     - fn
     - sound
     - brightness
 
+Logic:
+    - the algorithm is a function that looks at the history of presses and sends a key value as soon as it can confirm something
+    - three aspects of the algorithm:
+        - home row mod
+        - special mods
+        - local combos
+    - pattern matching
+        - if (start) keydown (end):
+            clear all key-up caveats
+            and continue
+        - if (start) keydown, keyup (end):
+            then send the key, flush the history
+        - if (start) (left/right hand home row keydown(s)) (other-hand keydown) (other-hand keyup) (end):
+            then send the other-hand key, flush the history, keep the modifier array, add key-up caveat for modifiers
+        - if (start) keydown, keydown (end); and (neither are home-row) and (neither are special mods) and (there are no local combos with both keys):
+            then send each key, flush the history, add key-up caveat for both
+        - if (start) (left/right hand home row keydown(s)) (other-hand keydown) (end) and (other-hand keydown is not special mod) and (there are no local combos with the other-hand keys):
+            then send the other-hand key, flush the history, add key-up caveat for both
+        - if (start) keydown, keydown (end); and (neither are home-row) and (neither are special mods) and (the largest combo involving both keys is 2):
+            then send the combo, flush the history, add key-up caveat for both
+        - if (start) keydown1, keydown2, keyup1 (end); and (there are no local combos with both keys):
+            then send each key1, flush it's keydown/keyup from the history
+        - if (start) (left/right hand home row keydown(s)) (other-hand keydown) (end):
+            - cancel-out said
+        - consider typing "axis", or "said"
+            - if non-home row keydown, keydown home row, 
+        - if (key is not a part of a local combo) and (no special mods are down):
+            - all keys before the 
+            - send the key with the home row mod, neutralize the keyup of the home row mod
+        - if (key is not a part of a local combo) and (special mod is down): send the special mod-mapped key with the home row mod, neutralize the keyup of the home row mod
+        - if (home row mod keys are down) and (key is a part of a local combo): send the key with the home row mod
+    - home row mod only activates if a key on the opposite hand is pressed after home row mod was pressed
+        - ex1: 
+            - right pointer finger (CMD/J) pressed
+            - left pointer finger (CMD/F) pressed => triggers CMD+F and "neutralized" the keyup of CMD/F and CMD/J
+            - right pinky (semicolon) pressed => ideally ignores that CMD/F is pressed and sends semicolon
+        - ex2: 
+            - right pointer finger (CMD/J) pressed
+            - left middle finger (SHIFT/D) pressed => triggers CMD+D and "neutralized" the keyup of CMD/D and CMD/J
+            - left middle finger (SHIFT/D) released => nothing
+            - left middle finger (SHIFT/D) pressed => triggers CMD+D and "neutralized" the keyup of CMD/D and CMD/J (even though CMD/J was neutralized)
+    - local combos (same-side) and layers
+        - if the key is not a part of any combo
+            - check if any special mod-keys were pressed (ex: spacebar)
+            - if so, trigger the that combo
+        - find the largest combo for the keys
+            - if all the keys are pressed, trigger the combo with the home row mod (return)
+            - if
+        - when a key is depressed (ex: spacebar/thumb1)
+        - if two keys of a two-or-three key combo are pressed, the 
+
+
+
 Older thoughts:
 
-ideas:
+ideas:special 
 - full keyboard for each hand, but no meta key combinations
 - note: don't make any chord a subset of another chord; otherwise it can't activate on keydown
 

@@ -1,3 +1,3 @@
 cd home
-deno run --allow-all --no-lock "../generate_reactive.js" && \
+#deno run --allow-all --no-lock "../generate_reactive.js" && \
 qmk compile -kb bastardkb/charybdis/4x6/v2/splinky_3 -km via && qmk flash -c -kb bastardkb/charybdis/4x6/v2/splinky_3 -km via 

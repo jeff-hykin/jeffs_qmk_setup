@@ -180,14 +180,14 @@ return false;
 //         uint16_t time
 //     }
 
-bool handle_key_event(uint16_t keycode, keyrecord_t *record, bool physical_key_is_down[MATRIX_ROWS * MATRIX_COLS], uint16_t keys_down, uint16_t index, uint8_t row, uint8_t col, bool key_is_going_down, bool some_other_physical_key_is_down);
+bool handle_key_event(uint16_t keycode, keyrecord_t *record, bool physical_key_is_down[MATRIX_ROWS * MATRIX_COLS], uint16_t keys_down, uint16_t index, uint8_t row, uint8_t col, bool keydown, bool some_other_physical_key_is_down);
 
 
 bool key_was_consumed[MATRIX_ROWS*MATRIX_COLS] = {0};
 #define number_of_physical_keys_that_can_be_down_at_the_same_time 30 // realistically on a human hand (three keys per finger)
 uint16_t key_press_history[number_of_physical_keys_that_can_be_down_at_the_same_time] = {0};
-bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_key_is_down[MATRIX_ROWS * MATRIX_COLS], uint16_t keys_down, uint16_t index, uint8_t row, uint8_t col, bool key_is_going_down, bool some_other_physical_key_is_down) {
-    if (key_is_going_down) {
+bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_key_is_down[MATRIX_ROWS * MATRIX_COLS], uint16_t keys_down, uint16_t index, uint8_t row, uint8_t col, bool keydown, bool some_other_physical_key_is_down) {
+    if (keydown) {
         key_press_history[keys_down] = index;
     }
     bool key_pressed_on_left_hand = index == 5 || index == 4 || index == 3 || index == 2 || index == 1 || index == 0 || index == 11 || index == 10 || index == 9 || index == 8 || index == 7 || index == 6 || index == 17 || index == 16 || index == 15 || index == 14 || index == 13 || index == 12 || index == 23 || index == 22 || index == 21 || index == 20 || index == 19 || index == 18 || index == 27 || index == 28 || index == 25 || index == 29 || index == 26;
@@ -198,7 +198,7 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
     bool gui_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? 46 : 16)];
     
     // do nothing on keyup of any "consumed" key
-    if (!key_is_going_down && key_was_consumed[index]) {
+    if (!keydown && key_was_consumed[index]) {
         key_was_consumed[index] = false;
         return false;
     }
@@ -306,8 +306,8 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
     // rightThumbMod1 (arrowLayer)
     // 
         if (index == 57) {
-            if (key_is_going_down) {
-                return false; // do nothing on key_is_going_down (other than remember it)
+            if (keydown) {
+                return false; // do nothing on keydown (other than remember it)
             // if not "consumed" 
             } else {
                 // activate the normal key
@@ -353,8 +353,8 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
     // rightThumbMod2 (numberLayer)
     // 
         if (index == 55) {
-            if (key_is_going_down) {
-                return false; // do nothing on key_is_going_down (other than remember it)
+            if (keydown) {
+                return false; // do nothing on keydown (other than remember it)
             // if not "consumed" 
             } else {
                 // activate the normal key
@@ -438,12 +438,7 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
                         tap_code16(LSFT(KC_BSPC));
                     }
                 key_was_consumed[37] = true;
-                if (physical_key_is_down[55]) {
-                    key_was_consumed[55] = true;
-                }
-                if (physical_key_is_down[57]) {
-                    key_was_consumed[57] = true;
-                }
+                key_was_consumed[57] = true;
                 // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
                 return false;
             }
@@ -859,8 +854,8 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
         // left hand
         // 
             if (index == 12) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -902,8 +897,8 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
                 }
             }
             if (index == 14) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -945,8 +940,8 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
                 }
             }
             if (index == 15) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -988,8 +983,8 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
                 }
             }
             if (index == 16) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -1035,8 +1030,8 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
         // Right Hand
         // 
             if (index == 42) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -1078,8 +1073,8 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
                 }
             }
             if (index == 44) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -1121,8 +1116,8 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
                 }
             }
             if (index == 45) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -1164,8 +1159,8 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
                 }
             }
             if (index == 46) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
+                if (keydown) {
+                    return false; // do nothing on keydown (other than remember it)
                 // if not "consumed" 
                 } else {
                     // activate the normal key
@@ -1236,7 +1231,7 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
     // 
     // printout helper
     // 
-        if (key_is_going_down) {
+        if (keydown) {
             
             if (index == 1) {
                 tap_code(KC_1);
@@ -1609,9 +1604,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     uint8_t row = record->event.key.row;
     uint8_t col = record->event.key.col;
     uint16_t index = row * MATRIX_COLS + col;
-    const bool key_is_going_down = record->event.pressed;
+    const bool keydown = record->event.pressed;
     bool some_other_physical_key_is_down = keys_down >= 1;
-    if (key_is_going_down) {
+    if (keydown) {
         keys_down++;
         physical_key_is_down[index] = true;
     } else {
@@ -1620,5 +1615,5 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     if (false && some_other_physical_key_is_down) {} // defeat the "warning not used" check
     
-    return handle_key_event(keycode, record, physical_key_is_down, keys_down, index, row, col, key_is_going_down, some_other_physical_key_is_down);
+    return handle_key_event(keycode, record, physical_key_is_down, keys_down, index, row, col, keydown, some_other_physical_key_is_down);
 };

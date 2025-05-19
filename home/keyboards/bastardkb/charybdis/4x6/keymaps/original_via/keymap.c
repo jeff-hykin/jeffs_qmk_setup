@@ -168,4 +168,5 @@ bool shutdown_user(bool) {
     rgb_matrix_set_color_all(RGB_RED);
     rgb_matrix_update_pwm_buffers();
 #endif // RGB_MATRIX_ENABLE
+    return false;
 }
