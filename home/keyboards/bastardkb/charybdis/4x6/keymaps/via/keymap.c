@@ -179,7 +179,7 @@ return false;
 //         bool     pressed
 //         uint16_t time
 //     }
-
+const int right_thumb_mod1_index = 57;
 // bool handle_key_event(uint16_t keycode, keyrecord_t *record, bool physical_key_is_down[MATRIX_ROWS * MATRIX_COLS], uint16_t keys_down, uint16_t index, uint8_t row, uint8_t col, bool key_is_going_down, bool some_other_physical_key_is_down);
 
 
@@ -1108,23 +1108,46 @@ return false;
 //     return !suppress_normal_behavior;
 // }
 
-// uint16_t keys_down = 0;
-// bool physical_key_is_down[MATRIX_ROWS*MATRIX_COLS] = {0};
-// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-//     // setup
-//     uint8_t row = record->event.key.row;
-//     uint8_t col = record->event.key.col;
-//     uint16_t index = row * MATRIX_COLS + col;
-//     const bool key_is_going_down = record->event.pressed;
-//     bool some_other_physical_key_is_down = keys_down >= 1;
-//     if (key_is_going_down) {
-//         keys_down++;
-//         physical_key_is_down[index] = true;
-//     } else {
-//         keys_down--;
-//         physical_key_is_down[index] = false;
-//     }
-//     if (false && some_other_physical_key_is_down) {} // defeat the "warning not used" check
+uint16_t keys_down = 0;
+bool physical_key_is_down[MATRIX_ROWS*MATRIX_COLS] = {0};
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // setup
+    uint8_t row = record->event.key.row;
+    uint8_t col = record->event.key.col;
+    uint16_t index = row * MATRIX_COLS + col;
+    const bool key_is_going_down = record->event.pressed;
+    bool some_other_physical_key_is_down = keys_down >= 1;
+    if (key_is_going_down) {
+        keys_down++;
+        physical_key_is_down[index] = true;
+    } else {
+        keys_down--;
+        physical_key_is_down[index] = false;
+    }
+    if (false && some_other_physical_key_is_down) {} // defeat the "warning not used" check
+        
+    // 
+    // boot key
+    // 
+    if (index == 30) {
+        reset_keyboard();
+        return false;
+    }
     
-//     return handle_key_event(keycode, record, physical_key_is_down, keys_down, index, row, col, key_is_going_down, some_other_physical_key_is_down);
-// };
+    //
+    // hold space press m equals
+    // 
+    const int m_or_equals_index = 51; // keyboard.leftHand.homeRowDown1[1]
+    if (index == m_or_equals_index && physical_key_is_down[right_thumb_mod1_index]) {
+        if (key_is_going_down) {
+            return false;
+        }
+        // delete the junk thing that will be typed
+        tap_code(KC_EQL);
+        // tap_code(KC_SPC);
+        return false;
+    }
+    
+    // return handle_key_event(keycode, record, physical_key_is_down, keys_down, index, row, col, key_is_going_down, some_other_physical_key_is_down);
+    return true;
+};

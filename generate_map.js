@@ -33,6 +33,7 @@ const toolKit = {
         KC_DOT: "KC_DOT",
         KC_DOWN: "KC_DOWN",
         KC_E: "KC_E",
+        KC_EQL: "KC_EQL", // equals
         KC_END: "KC_END",
         KC_ENT: "KC_ENT",
         KC_ESC: "KC_ESC",
