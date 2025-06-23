@@ -264,14 +264,14 @@ import { keyboard } from "./charybdis.js"
 // setup home row mod mapping
 // 
     const leftCtrlKey = keyboard.leftHand.homeRow[4]
-    const leftShiftKey = keyboard.leftHand.homeRow[2]
-    const leftAltKey = keyboard.leftHand.homeRow[1]
-    const leftGuiKey = keyboard.leftHand.homeRow[0]
+    const leftShiftKey = keyboard.leftHand.homeRowDown1[4]
+    const leftAltKey = keyboard.leftHand.thumb[0]
+    const leftGuiKey = keyboard.leftHand.thumb[1]
 
-    const rightCtrlKey = keyboard.rightHand.homeRow[4]
-    const rightShiftKey = keyboard.rightHand.homeRow[2]
-    const rightAltKey = keyboard.rightHand.homeRow[1]
-    const rightGuiKey = keyboard.rightHand.homeRow[0]
+    // const rightCtrlKey = keyboard.rightHand.homeRow[4]
+    const rightShiftKey = keyboard.rightHand.homeRowDown1[4]
+    // const rightAltKey = keyboard.rightHand.homeRow[1]
+    // const rightGuiKey = keyboard.rightHand.homeRow[0]
 
     const modifierToVarName = { ctrl: 'ctrl_physical_key_is_down', shift: 'shift_physical_key_is_down', alt: 'alt_physical_key_is_down', gui: 'gui_physical_key_is_down' }
 
@@ -290,7 +290,6 @@ import { keyboard } from "./charybdis.js"
         "sa",
     ]
 
-console.debug(`rightThumbMod1 is:`,rightThumbMod1)
 
 const backspaceKeyIndex = keyboard.rightHand.homeRowUp1[3]
 let code = makeKeyboardCode(`
@@ -298,15 +297,16 @@ bool key_was_consumed[MATRIX_ROWS*MATRIX_COLS] = {0};
 #define number_of_physical_keys_that_can_be_down_at_the_same_time 30 // realistically on a human hand (three keys per finger)
 uint16_t key_press_history[number_of_physical_keys_that_can_be_down_at_the_same_time] = {0};
 bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_key_is_down[MATRIX_ROWS * MATRIX_COLS], uint16_t keys_down, uint16_t index, uint8_t row, uint8_t col, bool key_is_going_down, bool some_other_physical_key_is_down) {
+    const bool suppress_normal_behavior = 0;
     if (key_is_going_down) {
         key_press_history[keys_down] = index;
     }
-    bool key_pressed_on_left_hand = ${Object.values(keyboard.leftHand).map(Object.values).flat(1).map(each=>`index == ${each}`).join(" || ")};
+    // bool key_pressed_on_left_hand = ${Object.values(keyboard.leftHand).map(Object.values).flat(1).map(each=>`index == ${each}`).join(" || ")};
     
-    bool ctrl_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? ${rightCtrlKey} : ${leftCtrlKey})];
-    bool shift_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? ${rightShiftKey} : ${leftShiftKey})];
-    bool alt_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? ${rightAltKey} : ${leftAltKey})];
-    bool gui_physical_key_is_down = physical_key_is_down[(key_pressed_on_left_hand ? ${rightGuiKey} : ${leftGuiKey})];
+    bool ctrl_physical_key_is_down = physical_key_is_down[${leftCtrlKey}];
+    bool shift_physical_key_is_down = physical_key_is_down[${leftShiftKey}] || physical_key_is_down[${rightShiftKey}];
+    bool alt_physical_key_is_down = physical_key_is_down[${leftAltKey}];
+    bool gui_physical_key_is_down = physical_key_is_down[${leftGuiKey}];
     
     // do nothing on keyup of any "consumed" key
     if (!key_is_going_down && key_was_consumed[index]) {
@@ -323,50 +323,11 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
     }
     
     // 
-    // two key combos
-    // 
-        // "FD" combo
-        if (physical_key_is_down[${keyboard.leftHand.homeRow[0]}] && physical_key_is_down[${keyboard.leftHand.homeRow[1]}]) {
-            // 
-            // tab
-            // 
-            ${sendKeyTapPermutations(keys.Tab, { indent: "                ", modifierToVarName})}
-            key_was_consumed[${keyboard.leftHand.homeRow[0]}] = true;
-            key_was_consumed[${keyboard.leftHand.homeRow[1]}] = true;
-            // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
-            return false;
-        }
-        // "AS" combo
-        if (physical_key_is_down[${keyboard.leftHand.homeRow[2]}] && physical_key_is_down[${keyboard.leftHand.homeRow[3]}]) {
-            // 
-            // Esc
-            // 
-            ${sendKeyTapPermutations(keys.Escape, { indent: "                ", modifierToVarName})}
-            key_was_consumed[${keyboard.leftHand.homeRow[2]}] = true;
-            key_was_consumed[${keyboard.leftHand.homeRow[3]}] = true;
-            // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
-            return false;
-        }
-    // 
     // rightThumbMod1 (arrowLayer)
     // 
         if (index == ${rightThumbMod1}) {
             if (key_is_going_down) {
-                return false; // do nothing on key_is_going_down (other than remember it)
-            // if not "consumed" 
-            } else {
-                // activate the normal key
-                ${sendKeyTapPermutations(keys.Spacebar, { indent: "                ", modifierToVarName})}
                 return false;
-            }
-        }
-    
-    // 
-    // rightThumbMod2 (numberLayer)
-    // 
-        if (index == ${rightThumbMod2}) {
-            if (key_is_going_down) {
-                return false; // do nothing on key_is_going_down (other than remember it)
             // if not "consumed" 
             } else {
                 // activate the normal key
@@ -377,7 +338,7 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
     // 
     // spacebar modifier
     // 
-        if (physical_key_is_down[${rightThumbMod1}] || physical_key_is_down[${rightThumbMod2}]) {
+        if (physical_key_is_down[${rightThumbMod1}] && key_is_going_down) {
             // 
             // backspace
             // 
@@ -393,8 +354,6 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
                 // memcpy(key_was_consumed, physical_key_is_down, sizeof(key_was_consumed));
                 return false;
             }
-        }
-        if (physical_key_is_down[${rightThumbMod1}]) {
             // 
             // arrow keys
             // 
@@ -501,97 +460,6 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
             // 
         }
     
-    // 
-    // home row mod
-    // 
-        // 
-        // left hand
-        // 
-            if (index == ${leftCtrlKey}) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
-                // if not "consumed" 
-                } else {
-                    // activate the normal key
-                    ${sendKeyTapPermutations(keys.KC_A,{ indent: "                ", modifierToVarName})};
-                    return false;
-                }
-            }
-            if (index == ${leftShiftKey}) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
-                // if not "consumed" 
-                } else {
-                    // activate the normal key
-                    ${sendKeyTapPermutations(keys.KC_S,{ indent: "                ", modifierToVarName})};
-                    return false;
-                }
-            }
-            if (index == ${leftAltKey}) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
-                // if not "consumed" 
-                } else {
-                    // activate the normal key
-                    ${sendKeyTapPermutations(keys.KC_D,{ indent: "                ", modifierToVarName})};
-                    return false;
-                }
-            }
-            if (index == ${leftGuiKey}) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
-                // if not "consumed" 
-                } else {
-                    // activate the normal key
-                    ${sendKeyTapPermutations(keys.KC_F,{ indent: "                ", modifierToVarName})};
-                    return false;
-                }
-            }
-        
-        // 
-        // Right Hand
-        // 
-            if (index == ${rightCtrlKey}) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
-                // if not "consumed" 
-                } else {
-                    // activate the normal key
-                    ${sendKeyTapPermutations(keys.KC_SEMICOLON,{ indent: "                ", modifierToVarName})};
-                    return false;
-                }
-            }
-            if (index == ${rightShiftKey}) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
-                // if not "consumed" 
-                } else {
-                    // activate the normal key
-                    ${sendKeyTapPermutations(keys.KC_L,{ indent: "                ", modifierToVarName})};
-                    return false;
-                }
-            }
-            if (index == ${rightAltKey}) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
-                // if not "consumed" 
-                } else {
-                    // activate the normal key
-                    ${sendKeyTapPermutations(keys.KC_K,{ indent: "                ", modifierToVarName})};
-                    return false;
-                }
-            }
-            if (index == ${rightGuiKey}) {
-                if (key_is_going_down) {
-                    return false; // do nothing on key_is_going_down (other than remember it)
-                // if not "consumed" 
-                } else {
-                    // activate the normal key
-                    ${sendKeyTapPermutations(keys.KC_J,{ indent: "                ", modifierToVarName})};
-                    return false;
-                }
-            }
-    
     
     // 
     // TODO:
@@ -622,371 +490,371 @@ bool handle_key_event(uint16_t keycode, keyrecord_t *record_ptr, bool physical_k
     // 
     // printout helper
     // 
-        if (key_is_going_down) {
+        // if (key_is_going_down) {
             
-            if (index == 1) {
-                tap_code(KC_1);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 2) {
-                tap_code(KC_2);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 3) {
-                tap_code(KC_3);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 4) {
-                tap_code(KC_4);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 5) {
-                tap_code(KC_5);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 6) {
-                tap_code(KC_6);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 7) {
-                tap_code(KC_7);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 8) {
-                tap_code(KC_8);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 9) {
-                tap_code(KC_9);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 10) {
-                tap_code(KC_1);
-                tap_code(KC_0);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 11) {
-                tap_code(KC_1);
-                tap_code(KC_1);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 12) {
-                tap_code(KC_1);
-                tap_code(KC_2);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 13) {
-                tap_code(KC_1);
-                tap_code(KC_3);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 14) {
-                tap_code(KC_1);
-                tap_code(KC_4);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 15) {
-                tap_code(KC_1);
-                tap_code(KC_5);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 16) {
-                tap_code(KC_1);
-                tap_code(KC_6);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 17) {
-                tap_code(KC_1);
-                tap_code(KC_7);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 18) {
-                tap_code(KC_1);
-                tap_code(KC_8);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 19) {
-                tap_code(KC_1);
-                tap_code(KC_9);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 20) {
-                tap_code(KC_2);
-                tap_code(KC_0);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 21) {
-                tap_code(KC_2);
-                tap_code(KC_1);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 22) {
-                tap_code(KC_2);
-                tap_code(KC_2);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 23) {
-                tap_code(KC_2);
-                tap_code(KC_3);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 24) {
-                tap_code(KC_2);
-                tap_code(KC_4);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 25) {
-                tap_code(KC_2);
-                tap_code(KC_5);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 26) {
-                tap_code(KC_2);
-                tap_code(KC_6);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 27) {
-                tap_code(KC_2);
-                tap_code(KC_7);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 28) {
-                tap_code(KC_2);
-                tap_code(KC_8);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 29) {
-                tap_code(KC_2);
-                tap_code(KC_9);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 30) {
-                tap_code(KC_3);
-                tap_code(KC_0);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 31) {
-                tap_code(KC_3);
-                tap_code(KC_1);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 32) {
-                tap_code(KC_3);
-                tap_code(KC_2);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 33) {
-                tap_code(KC_3);
-                tap_code(KC_3);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 34) {
-                tap_code(KC_3);
-                tap_code(KC_4);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 35) {
-                tap_code(KC_3);
-                tap_code(KC_5);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 36) {
-                tap_code(KC_3);
-                tap_code(KC_6);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 37) {
-                tap_code(KC_3);
-                tap_code(KC_7);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 38) {
-                tap_code(KC_3);
-                tap_code(KC_8);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 39) {
-                tap_code(KC_3);
-                tap_code(KC_9);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 40) {
-                tap_code(KC_4);
-                tap_code(KC_0);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 41) {
-                tap_code(KC_4);
-                tap_code(KC_1);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 42) {
-                tap_code(KC_4);
-                tap_code(KC_2);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 43) {
-                tap_code(KC_4);
-                tap_code(KC_3);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 44) {
-                tap_code(KC_4);
-                tap_code(KC_4);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 45) {
-                tap_code(KC_4);
-                tap_code(KC_5);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 46) {
-                tap_code(KC_4);
-                tap_code(KC_6);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 47) {
-                tap_code(KC_4);
-                tap_code(KC_7);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 48) {
-                tap_code(KC_4);
-                tap_code(KC_8);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 49) {
-                tap_code(KC_4);
-                tap_code(KC_9);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 50) {
-                tap_code(KC_5);
-                tap_code(KC_0);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 51) {
-                tap_code(KC_5);
-                tap_code(KC_1);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 52) {
-                tap_code(KC_5);
-                tap_code(KC_2);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 53) {
-                tap_code(KC_5);
-                tap_code(KC_3);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 54) {
-                tap_code(KC_5);
-                tap_code(KC_4);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 55) {
-                tap_code(KC_5);
-                tap_code(KC_5);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 56) {
-                tap_code(KC_5);
-                tap_code(KC_6);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 57) {
-                tap_code(KC_5);
-                tap_code(KC_7);
-                tap_code(KC_COMMA);
-                return false;
-            } else if (index == 58) {
-                tap_code(KC_5);
-                tap_code(KC_8);
-                tap_code(KC_COMMA);
-                return false;
-            }
+        //     if (index == 1) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 2) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 3) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 4) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 5) {
+        //         tap_code(KC_5);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 6) {
+        //         tap_code(KC_6);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 7) {
+        //         tap_code(KC_7);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 8) {
+        //         tap_code(KC_8);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 9) {
+        //         tap_code(KC_9);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 10) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_0);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 11) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_1);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 12) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_2);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 13) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_3);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 14) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_4);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 15) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_5);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 16) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_6);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 17) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_7);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 18) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_8);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 19) {
+        //         tap_code(KC_1);
+        //         tap_code(KC_9);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 20) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_0);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 21) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_1);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 22) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_2);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 23) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_3);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 24) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_4);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 25) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_5);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 26) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_6);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 27) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_7);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 28) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_8);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 29) {
+        //         tap_code(KC_2);
+        //         tap_code(KC_9);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 30) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_0);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 31) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_1);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 32) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_2);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 33) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_3);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 34) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_4);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 35) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_5);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 36) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_6);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 37) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_7);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 38) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_8);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 39) {
+        //         tap_code(KC_3);
+        //         tap_code(KC_9);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 40) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_0);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 41) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_1);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 42) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_2);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 43) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_3);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 44) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_4);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 45) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_5);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 46) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_6);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 47) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_7);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 48) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_8);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 49) {
+        //         tap_code(KC_4);
+        //         tap_code(KC_9);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 50) {
+        //         tap_code(KC_5);
+        //         tap_code(KC_0);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 51) {
+        //         tap_code(KC_5);
+        //         tap_code(KC_1);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 52) {
+        //         tap_code(KC_5);
+        //         tap_code(KC_2);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 53) {
+        //         tap_code(KC_5);
+        //         tap_code(KC_3);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 54) {
+        //         tap_code(KC_5);
+        //         tap_code(KC_4);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 55) {
+        //         tap_code(KC_5);
+        //         tap_code(KC_5);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 56) {
+        //         tap_code(KC_5);
+        //         tap_code(KC_6);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 57) {
+        //         tap_code(KC_5);
+        //         tap_code(KC_7);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     } else if (index == 58) {
+        //         tap_code(KC_5);
+        //         tap_code(KC_8);
+        //         tap_code(KC_COMMA);
+        //         return false;
+        //     }
             
-            tap_code(KC_R);
-            switch (row) {
-                case 0:
-                    tap_code(KC_0);
-                    break;
-                case 1:
-                    tap_code(KC_1);
-                    break;
-                case 2:
-                    tap_code(KC_2);
-                    break;
-                case 3:
-                    tap_code(KC_3);
-                    break;
-                case 4:
-                    tap_code(KC_4);
-                    break;
-                case 5:
-                    tap_code(KC_5);
-                    break;
-                case 6:
-                    tap_code(KC_6);
-                    break;
-                case 7:
-                    tap_code(KC_7);
-                    break;
-                case 8:
-                    tap_code(KC_8);
-                    break;
-                case 9:
-                    tap_code(KC_9);
-                    break;
-                case 10:
-                    tap_code(KC_1);
-                    tap_code(KC_0);
-                    break;
-            }
-            tap_code(KC_C);
-            switch (col) {
-                case 0:
-                    tap_code(KC_0);
-                    break;
-                case 1:
-                    tap_code(KC_1);
-                    break;
-                case 2:
-                    tap_code(KC_2);
-                    break;
-                case 3:
-                    tap_code(KC_3);
-                    break;
-                case 4:
-                    tap_code(KC_4);
-                    break;
-                case 5:
-                    tap_code(KC_5);
-                    break;
-                case 6:
-                    tap_code(KC_6);
-                    break;
-                case 7:
-                    tap_code(KC_7);
-                    break;
-                case 8:
-                    tap_code(KC_8);
-                    break;
-                case 9:
-                    tap_code(KC_9);
-                    break;
-                case 10:
-                    tap_code(KC_1);
-                    tap_code(KC_0);
-                    break;
-            }
-            tap_code(KC_COMMA);
-            return false;
-        }
+        //     tap_code(KC_R);
+        //     switch (row) {
+        //         case 0:
+        //             tap_code(KC_0);
+        //             break;
+        //         case 1:
+        //             tap_code(KC_1);
+        //             break;
+        //         case 2:
+        //             tap_code(KC_2);
+        //             break;
+        //         case 3:
+        //             tap_code(KC_3);
+        //             break;
+        //         case 4:
+        //             tap_code(KC_4);
+        //             break;
+        //         case 5:
+        //             tap_code(KC_5);
+        //             break;
+        //         case 6:
+        //             tap_code(KC_6);
+        //             break;
+        //         case 7:
+        //             tap_code(KC_7);
+        //             break;
+        //         case 8:
+        //             tap_code(KC_8);
+        //             break;
+        //         case 9:
+        //             tap_code(KC_9);
+        //             break;
+        //         case 10:
+        //             tap_code(KC_1);
+        //             tap_code(KC_0);
+        //             break;
+        //     }
+        //     tap_code(KC_C);
+        //     switch (col) {
+        //         case 0:
+        //             tap_code(KC_0);
+        //             break;
+        //         case 1:
+        //             tap_code(KC_1);
+        //             break;
+        //         case 2:
+        //             tap_code(KC_2);
+        //             break;
+        //         case 3:
+        //             tap_code(KC_3);
+        //             break;
+        //         case 4:
+        //             tap_code(KC_4);
+        //             break;
+        //         case 5:
+        //             tap_code(KC_5);
+        //             break;
+        //         case 6:
+        //             tap_code(KC_6);
+        //             break;
+        //         case 7:
+        //             tap_code(KC_7);
+        //             break;
+        //         case 8:
+        //             tap_code(KC_8);
+        //             break;
+        //         case 9:
+        //             tap_code(KC_9);
+        //             break;
+        //         case 10:
+        //             tap_code(KC_1);
+        //             tap_code(KC_0);
+        //             break;
+        //     }
+        //     tap_code(KC_COMMA);
+        //     return false;
+        // }
 
-    return false;
-}`)
+    return !suppress_normal_behavior;
+}`)     
 
 // console.log(code)
 import { FileSystem, glob } from "https://deno.land/x/quickr@0.8.1/main/file_system.js"
