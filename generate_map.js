@@ -87,6 +87,7 @@ const toolKit = {
         KC_P8: "KC_P8",
         KC_P9: "KC_P9",
         KC_PAST: "KC_PAST",
+        KC_PCMM: "KC_PCMM", // comma (standalone)
         KC_PDOT: "KC_PDOT",
         KC_PEQL: "KC_PEQL",
         KC_PERC: "KC_PERC",

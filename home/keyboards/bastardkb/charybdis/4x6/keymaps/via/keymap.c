@@ -1108,46 +1108,74 @@ const int right_thumb_mod1_index = 57;
 //     return !suppress_normal_behavior;
 // }
 
-uint16_t keys_down = 0;
-bool physical_key_is_down[MATRIX_ROWS*MATRIX_COLS] = {0};
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    // setup
-    uint8_t row = record->event.key.row;
-    uint8_t col = record->event.key.col;
-    uint16_t index = row * MATRIX_COLS + col;
-    const bool key_is_going_down = record->event.pressed;
-    bool some_other_physical_key_is_down = keys_down >= 1;
-    if (key_is_going_down) {
-        keys_down++;
-        physical_key_is_down[index] = true;
-    } else {
-        keys_down--;
-        physical_key_is_down[index] = false;
-    }
-    if (false && some_other_physical_key_is_down) {} // defeat the "warning not used" check
+// uint16_t keys_down = 0;
+// bool physical_key_is_down[MATRIX_ROWS*MATRIX_COLS] = {0};
+// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+//     // setup
+//     uint8_t row = record->event.key.row;
+//     uint8_t col = record->event.key.col;
+//     uint16_t index = row * MATRIX_COLS + col;
+//     const bool key_is_going_down = record->event.pressed;
+//     bool some_other_physical_key_is_down = keys_down >= 1;
+//     if (key_is_going_down) {
+//         keys_down++;
+//         physical_key_is_down[index] = true;
+//     } else {
+//         keys_down--;
+//         physical_key_is_down[index] = false;
+//     }
+//     if (false && some_other_physical_key_is_down) {} // defeat the "warning not used" check
         
-    // 
-    // boot key
-    // 
-    if (index == 30) {
-        reset_keyboard();
-        return false;
-    }
+//     // 
+//     // boot key
+//     // 
+//     if (index == 30) {
+//         reset_keyboard();
+//         return false;
+//     }
     
-    //
-    // hold space press m equals
-    // 
-    const int m_or_equals_index = 51; // keyboard.leftHand.homeRowDown1[1]
-    if (index == m_or_equals_index && physical_key_is_down[right_thumb_mod1_index]) {
-        if (key_is_going_down) {
-            return false;
-        }
-        // delete the junk thing that will be typed
-        tap_code(KC_EQL);
-        // tap_code(KC_SPC);
-        return false;
-    }
+//     //
+//     // hold space press m equals
+//     // 
+//     const int m_or_equals_index = 51; // keyboard.rightHand.homeRowDown1[1]
+//     if (index == m_or_equals_index && physical_key_is_down[right_thumb_mod1_index]) {
+//         if (key_is_going_down) {
+//             return false;
+//         }
+//         tap_code(KC_EQL);
+//         return false;
+//     }
     
-    // return handle_key_event(keycode, record, physical_key_is_down, keys_down, index, row, col, key_is_going_down, some_other_physical_key_is_down);
-    return true;
-};
+//     //
+//     // hold space
+//     // 
+//     const int astrix_or_dot_index = 50; // keyboard.rightHand.homeRowDown1[2]
+//     if (index == astrix_or_dot_index && physical_key_is_down[right_thumb_mod1_index]) {
+//         if (key_is_going_down) {
+//             return false;
+//         }
+//         tap_code(KC_PDOT); // dot AKA period
+//         return false;
+//     }
+    
+//     //
+//     // hold space
+//     // 
+//         // FIXME: there seems to be a bug in QMK
+//         // enabling the below code should work, but instead I can press space then comma quickly and it only registers space
+//         // sometimes it registers an equal sign (very strange, requires a lot of attempts to trigger)
+//         // but it never registers a comma unless the key has been pressed for the normal layer-activation time (100ms at them moment)
+//         // 
+//         // const int c_or_comma_index = 22; // keyboard.leftHand.homeRowDown1[0]
+//         // if (index == c_or_comma_index && physical_key_is_down[right_thumb_mod1_index]) {
+//         //     if (key_is_going_down) {
+//         //         return false;
+//         //     }
+//         //     tap_code(KC_COMMA); // comma
+//         //     tap_code(KC_COMMA); // comma
+//         //     return false;
+//         // }
+    
+//     // return handle_key_event(keycode, record, physical_key_is_down, keys_down, index, row, col, key_is_going_down, some_other_physical_key_is_down);
+//     return true;
+// };
