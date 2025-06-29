@@ -85,3 +85,21 @@ export const keyboard = {
     rowColumnToIndex,
     indexToRowColumn,
 }
+
+// // print C versions of all the constants
+// // import { toScreamingSnakeCase } from 'https://esm.sh/gh/jeff-hykin/good-js@1.17.2.0/source/flattened/to_screaming_snake_case.js'
+// for (const [hand, handValue] of Object.entries(keyboard)) {
+//     if (hand != 'rightHand' && hand != 'leftHand') {
+//         continue
+//     }
+//     for (const [rowName, rowValue] of Object.entries(handValue)) {
+//         for (let [letter, index] of Object.entries(rowValue)) {
+//             if (letter.startsWith('-')) {
+//                 letter = `neg_${letter[1]}`
+//             } else {
+//                 letter = `${letter[0]}`
+//             }
+//             console.log(`const int32_t indexOf_${(hand)}_${(rowName)}_${(letter)} = ${index};`)
+//         }
+//     }
+// }

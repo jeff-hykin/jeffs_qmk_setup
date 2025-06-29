@@ -176,8 +176,67 @@ bool shutdown_user(bool) {
 // custom combos
 // 
 // 
+const int8_t indexOf_leftHand_homeRowUp2_neg_1 = 5;
+const int8_t indexOf_leftHand_homeRowUp2_0 = 4;
+const int8_t indexOf_leftHand_homeRowUp2_1 = 3;
+const int8_t indexOf_leftHand_homeRowUp2_2 = 2;
+const int8_t indexOf_leftHand_homeRowUp2_3 = 1;
+const int8_t indexOf_leftHand_homeRowUp2_4 = 0;
+const int8_t indexOf_leftHand_homeRowUp1_neg_1 = 11;
+const int8_t indexOf_leftHand_homeRowUp1_0 = 10;
+const int8_t indexOf_leftHand_homeRowUp1_1 = 9;
+const int8_t indexOf_leftHand_homeRowUp1_2 = 8;
+const int8_t indexOf_leftHand_homeRowUp1_3 = 7;
+const int8_t indexOf_leftHand_homeRowUp1_4 = 6;
+const int8_t indexOf_leftHand_homeRow_neg_1 = 17;
+const int8_t indexOf_leftHand_homeRow_0 = 16;
+const int8_t indexOf_leftHand_homeRow_1 = 15;
+const int8_t indexOf_leftHand_homeRow_2 = 14;
+const int8_t indexOf_leftHand_homeRow_3 = 13;
+const int8_t indexOf_leftHand_homeRow_4 = 12;
+const int8_t indexOf_leftHand_homeRowDown1_neg_1 = 23;
+const int8_t indexOf_leftHand_homeRowDown1_0 = 22;
+const int8_t indexOf_leftHand_homeRowDown1_1 = 21;
+const int8_t indexOf_leftHand_homeRowDown1_2 = 20;
+const int8_t indexOf_leftHand_homeRowDown1_3 = 19;
+const int8_t indexOf_leftHand_homeRowDown1_4 = 18;
+const int8_t indexOf_leftHand_thumb_0 = 27;
+const int8_t indexOf_leftHand_thumb_1 = 28;
+const int8_t indexOf_leftHand_thumb_2 = 25;
+const int8_t indexOf_leftHand_thumb_3 = 29;
+const int8_t indexOf_leftHand_thumb_4 = 26;
+const int8_t indexOf_rightHand_homeRowUp2_neg_1 = 35;
+const int8_t indexOf_rightHand_homeRowUp2_0 = 34;
+const int8_t indexOf_rightHand_homeRowUp2_1 = 33;
+const int8_t indexOf_rightHand_homeRowUp2_2 = 32;
+const int8_t indexOf_rightHand_homeRowUp2_3 = 31;
+const int8_t indexOf_rightHand_homeRowUp2_4 = 30;
+const int8_t indexOf_rightHand_homeRowUp1_neg_1 = 41;
+const int8_t indexOf_rightHand_homeRowUp1_0 = 40;
+const int8_t indexOf_rightHand_homeRowUp1_1 = 39;
+const int8_t indexOf_rightHand_homeRowUp1_2 = 38;
+const int8_t indexOf_rightHand_homeRowUp1_3 = 37;
+const int8_t indexOf_rightHand_homeRowUp1_4 = 36;
+const int8_t indexOf_rightHand_homeRow_neg_1 = 47;
+const int8_t indexOf_rightHand_homeRow_0 = 46;
+const int8_t indexOf_rightHand_homeRow_1 = 45;
+const int8_t indexOf_rightHand_homeRow_2 = 44;
+const int8_t indexOf_rightHand_homeRow_3 = 43;
+const int8_t indexOf_rightHand_homeRow_4 = 42;
+const int8_t indexOf_rightHand_homeRowDown1_neg_1 = 53;
+const int8_t indexOf_rightHand_homeRowDown1_0 = 52;
+const int8_t indexOf_rightHand_homeRowDown1_1 = 51;
+const int8_t indexOf_rightHand_homeRowDown1_2 = 50;
+const int8_t indexOf_rightHand_homeRowDown1_3 = 49;
+const int8_t indexOf_rightHand_homeRowDown1_4 = 48;
+const int8_t indexOf_rightHand_thumb_0 = 55;
+const int8_t indexOf_rightHand_thumb_1 = 57;
+const int8_t indexOf_rightHand_thumb_2 = 59;
+
+
 uint16_t keys_down = 0;
 bool physical_key_is_down[MATRIX_ROWS*MATRIX_COLS] = {0};
+bool ignore_keyup_of[MATRIX_ROWS*MATRIX_COLS] = {0};
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // setup
     uint8_t row = record->event.key.row;
@@ -197,15 +256,59 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // 
     // boot key
     // 
-    if (index == 30) {
+    if (index == indexOf_rightHand_homeRowUp2_4) {
         reset_keyboard();
         return false;
     }
     
-    // //
-    // // hold space press m equals
-    // // 
-    // const int m_or_equals_index = 51; // keyboard.leftHand.homeRowDown1[1]
+    // // happens because of combos
+    // if (!key_is_going_down && ignore_keyup_of[index]) {
+    //     // reset
+    //     ignore_keyup_of[index] = false;
+    //     return false;
+    // }
+    
+    //
+    // hold space press m equals
+    // 
+    const int8_t f_index = indexOf_leftHand_homeRow_0;
+    const int8_t c_index = indexOf_leftHand_homeRowDown1_0;
+    const int8_t r_index = indexOf_leftHand_homeRowUp1_0;
+    const int8_t n_index = indexOf_rightHand_homeRowDown1_0;
+    if (key_is_going_down && index == n_index) {
+        if (physical_key_is_down[f_index]) {
+            tap_code(KC_U);
+            tap_code(KC_N);
+            tap_code(KC_C);
+            tap_code(KC_T);
+            tap_code(KC_I);
+            tap_code(KC_O);
+            tap_code(KC_N);
+            ignore_keyup_of[f_index] = true;
+            ignore_keyup_of[n_index] = true;
+            return false;
+        } else if (physical_key_is_down[c_index]) {
+            tap_code(KC_O);
+            tap_code(KC_N);
+            tap_code(KC_S);
+            tap_code(KC_T);
+            tap_code(KC_SPC);
+            ignore_keyup_of[c_index] = true;
+            ignore_keyup_of[n_index] = true;
+            return false;
+        } else if (physical_key_is_down[r_index]) {
+            tap_code(KC_E);
+            tap_code(KC_T);
+            tap_code(KC_U);
+            tap_code(KC_R);
+            tap_code(KC_N);
+            tap_code(KC_SPC);
+            ignore_keyup_of[r_index] = true;
+            ignore_keyup_of[n_index] = true;
+            return false;
+        }
+    }
+    // const int m_or_equals_index = indexOf_leftHand_homeRowDown1_1;
     // if (index == m_or_equals_index && physical_key_is_down[right_thumb_mod1_index]) {
     //     if (key_is_going_down) {
     //         return false;
